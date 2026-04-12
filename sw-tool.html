@@ -16,162 +16,120 @@
             <p>本作は、「グループSNE」及び「株式会社KADOKAWA」が権利を有する『ソード・ワールド2.5』の二次創作物です。(C)GroupSNE(C)KADOKAWA</p>
             <p>内容はかなり省略してあるので、あくまで参考程度にしてルルブも見ながら作成してください。</p>
 
-<div class="tool-box">
-    <h3>使用ルール・サプリメント</h3>
-    
-    <!-- 表に出す基本ルールブック -->
-    <div class="rule-checkboxes">
-        <label><input type="checkbox" class="rule-check" value="rule1" checked> ルールブックⅠ</label>
-        <label><input type="checkbox" class="rule-check" value="rule2" checked> ルールブックⅡ</label>
-        <label><input type="checkbox" class="rule-check" value="rule3" checked> ルールブックⅢ</label>
-    </div>
-
-    <!-- 折りたたみのサプリメント欄 -->
-<!-- <details class="tool-accordion">
-    <summary>サプリメントを追加する（クリックで展開）</summary>
-    <div class="tool-accordion-content">
-        <p style="color: #888; font-size: 0.85em; margin-bottom: 10px;">
-            ※サプリメントは今後順次追加予定です。
-        </p>
-        
-        <!-- 現在実装済みのもの（例として） -->
-        <!-- <label><input type="checkbox" class="rule-check" value="rule2"> ルールブックⅡ</label> -->
-        
-    </div>
-</details>
-<!-- 2. 種族選択 -->
-<div class="tool-box">
-    <h3>種族選択</h3>
-    <!-- JavaScriptで、上のチェックボックスに応じて中身(option)を出し入れする -->
-    <div style="display: flex; gap: 10px; align-items: center;">
-        <select id="race-select" style="flex: 1;">
-            <option value="">-- 種族を選択 --</option>
-        </select>
-        <button id="random-race-btn" class="social-btn" style="padding: 5px 15px;">🎲 ガチャ</button>
-    </div>
-
-    <div id="race-info-container" style="display:none; margin-top: 15px;">
-        <!-- タブボタン -->
-        <div class="race-tabs">
-            <button class="race-tab-btn active" data-target="tab-feature">種族特徴</button>
-            <button class="race-tab-btn" data-target="tab-desc">説明・適性</button>
-            <button class="race-tab-btn" data-target="tab-appearance">外見</button>
-            <button class="race-tab-btn" data-target="tab-age">寿命・成人</button>
-        </div>
-
-        <!-- タブの中身（コンテンツ） -->
-        <div class="race-tab-contents">
-            <div class="race-tab-content active" id="tab-feature"></div>
-            <div class="race-tab-content" id="tab-desc"></div>
-            <div class="race-tab-content" id="tab-appearance"></div>
-            <div class="race-tab-content" id="tab-age"></div>
-        </div>
-
-        <!-- 3. ダイスロール -->
-        <div class="tool-box" id="dice-section" style="display:none; margin-top: 15px;">
-            <h3>能力値ダイス（3回振る）</h3>
-            <button id="roll-btn" class="social-btn">ダイスを振る！</button>
-            <div id="dice-results" style="margin-top: 10px;"></div>
-        </div>
-
-        <!-- ▼ 新しく追加：選んだダイス結果をキープする枠 ▼ -->
-        <div class="tool-box" id="selected-dice-section" style="display:none; background: #f0f8ff; border: 2px solid #5fa8d3; margin-top: 15px;">
-            <h3>📌 決定したベース能力（A〜F）</h3>
-            <div id="selected-dice-display" style="font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px;"></div>
-            <p style="margin-size: 0.9em; color: #555; margin: 0;">※これをベースに、次の「生まれ表」で基礎値を足して最終的な能力値が決まります。</p>
-        </div>
-        <!-- ▲ 新しく追加ここまで ▲ -->
-    </div>
-
-    <div id="race-description" class="info-box" style="display:none; margin-top: 10px; padding: 10px; background: #f0f0f0;"></div>
-</div>
-
-<!-- ▼ ここから差し替え ▼ -->
-<!-- 4. 生まれ表と最終ステータス -->
-<div class="tool-box" id="birth-section" style="display:none; margin-top: 15px;">
-    <h3>生まれと最終能力値の決定</h3>
-    <p style="font-size: 0.9em; color: #555;">キープしたA〜Fのダイス値に、生まれの「技・体・心」を足して最終ステータスを算出します。</p>
-    
-    <div style="display: flex; gap: 10px; align-items: center;">
-        <select id="birth-select" style="flex: 1; padding: 5px;">
-            <option value="">-- 生まれを選択 --</option>
-        </select>
-        <button id="random-birth-btn" class="social-btn" style="padding: 5px 15px;">🎲 生まれを振る</button>
-    </div>
-
-    <!-- 最終ステータス表示領域 -->
-    <div id="final-status-display" style="margin-top: 15px; border: 2px solid #5fa8d3; padding: 15px; background: #fff; border-radius: 8px; display:none;">
-        <!-- JSで計算結果が入ります -->
-    </div>
-</div>
-<!-- ▲ 差し替えここまで ▲ -->
-
-<!-- 6. 経歴と冒険に出た理由 -->
-<div class="tool-box" id="flavor-section" style="margin-top: 15px;">
-    <h3>経歴・冒険に出た理由</h3>
-    <p style="font-size: 0.9em; color: #555;">リストから選ぶか、ガチャを振るか、下のテキストボックスに自由に書き込むことができます。</p>
-    
-    <div style="margin-bottom: 15px;">
-        <button id="all-random-flavor-btn" class="social-btn" style="width: 100%; padding: 8px;">🎲 4つすべてをまとめてガチャで決める</button>
-    </div>
-
-    <div id="flavor-lists">
-        <!-- 経歴1 -->
-        <div class="flavor-item" style="margin-bottom: 10px;">
-            <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
-                <strong style="width: 50px;">経歴1</strong>
-                <select class="history-select" style="flex: 1; padding: 5px;">
-                    <option value="">-- リストから選択 --</option>
-                </select>
-                <button class="random-history-btn" style="padding: 5px 10px;">🎲</button>
+            <div class="tool-box">
+                <h3>使用ルール・サプリメント</h3>
+                <div class="rule-checkboxes">
+                    <label><input type="checkbox" class="rule-check" value="rule1" checked> ルールブックⅠ</label>
+                    <label><input type="checkbox" class="rule-check" value="rule2" checked> ルールブックⅡ</label>
+                    <label><input type="checkbox" class="rule-check" value="rule3" checked> ルールブックⅢ</label>
+                </div>
             </div>
-            <input type="text" class="history-input" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="自由にテキストを入力できます">
-        </div>
 
-        <!-- 経歴2 -->
-        <div class="flavor-item" style="margin-bottom: 10px;">
-            <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
-                <strong style="width: 50px;">経歴2</strong>
-                <select class="history-select" style="flex: 1; padding: 5px;">
-                    <option value="">-- リストから選択 --</option>
-                </select>
-                <button class="random-history-btn" style="padding: 5px 10px;">🎲</button>
+            <!-- 2. 種族選択 -->
+            <div class="tool-box">
+                <h3>種族選択</h3>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <select id="race-select" style="flex: 1;">
+                        <option value="">-- 種族を選択 --</option>
+                    </select>
+                    <button id="random-race-btn" class="social-btn" style="padding: 5px 15px;">🎲 ガチャ</button>
+                </div>
+
+                <div id="race-info-container" style="display:none; margin-top: 15px;">
+                    <!-- タブボタン -->
+                    <div class="race-tabs">
+                        <button class="race-tab-btn active" data-target="tab-feature">種族特徴</button>
+                        <button class="race-tab-btn" data-target="tab-desc">説明・適性</button>
+                        <button class="race-tab-btn" data-target="tab-appearance">外見</button>
+                        <button class="race-tab-btn" data-target="tab-age">寿命・成人</button>
+                    </div>
+
+                    <!-- タブの中身 -->
+                    <div class="race-tab-contents">
+                        <div class="race-tab-content active" id="tab-feature"></div>
+                        <div class="race-tab-content" id="tab-desc"></div>
+                        <div class="race-tab-content" id="tab-appearance"></div>
+                        <div class="race-tab-content" id="tab-age"></div>
+                    </div>
+
+                    <!-- 3. ダイスロール -->
+                    <div class="tool-box" id="dice-section" style="display:none; margin-top: 15px;">
+                        <h3>能力値ダイス（3回振る）</h3>
+                        <button id="roll-btn" class="social-btn">ダイスを振る！</button>
+                        <div id="dice-results" style="margin-top: 10px;"></div>
+                    </div>
+
+                    <!-- 選んだダイス結果をキープする枠 -->
+                    <div class="tool-box" id="selected-dice-section" style="display:none; background: #f0f8ff; border: 2px solid #5fa8d3; margin-top: 15px;">
+                        <h3>📌 決定したベース能力（A〜F）</h3>
+                        <div id="selected-dice-display" style="font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px;"></div>
+                        <div id="advice-display" style="margin-top: 10px; padding: 10px; background: #fff; border-radius: 5px; border: 1px dashed #5fa8d3;"></div>
+                        <p style="font-size: 0.9em; color: #d32f2f; margin: 0; font-weight: bold;">
+                            ※これをメモして、ルールブックの「生まれ表」を参照し、基礎値（技・体・心）を足して最終的な能力値を計算してください！
+                        </p>
+                    </div>
+                </div>
+
+                <div id="race-description" class="info-box" style="display:none; margin-top: 10px; padding: 10px; background: #f0f0f0;"></div>
             </div>
-            <input type="text" class="history-input" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="自由にテキストを入力できます">
-        </div>
 
-        <!-- 経歴3 -->
-        <div class="flavor-item" style="margin-bottom: 10px;">
-            <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
-                <strong style="width: 50px;">経歴3</strong>
-                <select class="history-select" style="flex: 1; padding: 5px;">
-                    <option value="">-- リストから選択 --</option>
-                </select>
-                <button class="random-history-btn" style="padding: 5px 10px;">🎲</button>
-            </div>
-            <input type="text" class="history-input" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="自由にテキストを入力できます">
-        </div>
+            <!-- 4. 経歴と冒険に出た理由 -->
+            <div class="tool-box" id="flavor-section" style="margin-top: 15px;">
+                <h3>経歴・冒険に出た理由</h3>
+                <p style="font-size: 0.9em; color: #555;">リストから選ぶか、ガチャを振るか、下のテキストボックスに自由に書き込むことができます。</p>
+                
+                <div style="margin-bottom: 15px;">
+                    <button id="all-random-flavor-btn" class="social-btn" style="width: 100%; padding: 8px;">🎲 4つすべてをまとめてガチャで決める</button>
+                </div>
 
-        <!-- 理由 -->
-        <div class="flavor-item" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 15px;">
-            <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
-                <strong style="width: 50px;">理由</strong>
-                <select id="reason-select" style="flex: 1; padding: 5px;">
-                    <option value="">-- リストから選択 --</option>
-                </select>
-                <button id="random-reason-btn" style="padding: 5px 10px;">🎲</button>
-            </div>
-            <input type="text" id="reason-input" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="自由にテキストを入力できます">
-        </div>
-    </div>
-</div>
+                <div id="flavor-lists">
+                    <!-- 経歴1 -->
+                    <div class="flavor-item" style="margin-bottom: 10px;">
+                        <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
+                            <strong style="width: 50px;">経歴1</strong>
+                            <select class="history-select" style="flex: 1; padding: 5px;">
+                                <option value="">-- リストから選択 --</option>
+                            </select>
+                            <button class="random-history-btn" style="padding: 5px 10px;">🎲</button>
+                        </div>
+                        <input type="text" class="history-input" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="自由にテキストを入力できます">
+                    </div>
 
-            <!-- 4. 生まれ表と適性アドバイス -->
-            <div class="tool-box" id="advice-section" style="display:none;">
-                <h3>適正とアドバイス</h3>
-                <button id="birth-btn">生まれ表を振る</button>
-                <div id="advice-results" style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;">
-                    <!-- ここにアドバイスが出る -->
+                    <!-- 経歴2 -->
+                    <div class="flavor-item" style="margin-bottom: 10px;">
+                        <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
+                            <strong style="width: 50px;">経歴2</strong>
+                            <select class="history-select" style="flex: 1; padding: 5px;">
+                                <option value="">-- リストから選択 --</option>
+                            </select>
+                            <button class="random-history-btn" style="padding: 5px 10px;">🎲</button>
+                        </div>
+                        <input type="text" class="history-input" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="自由にテキストを入力できます">
+                    </div>
+
+                    <!-- 経歴3 -->
+                    <div class="flavor-item" style="margin-bottom: 10px;">
+                        <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
+                            <strong style="width: 50px;">経歴3</strong>
+                            <select class="history-select" style="flex: 1; padding: 5px;">
+                                <option value="">-- リストから選択 --</option>
+                            </select>
+                            <button class="random-history-btn" style="padding: 5px 10px;">🎲</button>
+                        </div>
+                        <input type="text" class="history-input" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="自由にテキストを入力できます">
+                    </div>
+
+                    <!-- 理由 -->
+                    <div class="flavor-item" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 15px;">
+                        <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
+                            <strong style="width: 50px;">理由</strong>
+                            <select id="reason-select" style="flex: 1; padding: 5px;">
+                                <option value="">-- リストから選択 --</option>
+                            </select>
+                            <button id="random-reason-btn" style="padding: 5px 10px;">🎲</button>
+                        </div>
+                        <input type="text" id="reason-input" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="自由にテキストを入力できます">
+                    </div>
                 </div>
             </div>
 
@@ -180,13 +138,8 @@
 
     <div id="footer-placeholder"></div>
 
-    <!-- 共通のmain.js（ヘッダー読み込み等） -->
     <script src="main.js"></script>
-
-    <!-- ▼ 追加：データ管理用のJSを先に読み込む ▼ -->
     <script src="sw-data.js"></script>
-
-    <!-- このツール専用のJS（動きの制御） -->
     <script src="sw-tool.js"></script>
 </body>
 </html>
