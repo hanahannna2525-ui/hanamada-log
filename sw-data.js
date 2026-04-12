@@ -103,7 +103,13 @@ const BACKGROUNDS = {
         { name: "神官", skills: "プリースト", base: { tec: 4, phy: 8, spi: 9 }, exp: 2000, source: "rule1" },
         { name: "操霊術師", skills: "コンジャラー", base: { tec: 7, phy: 4, spi: 10 }, exp: 2000, source: "rule1" },
         // ルルブ2の追加生まれの例
-        { name: "野伏", skills: "レンジャー1レベル", base: { tec: 5, phy: 5, spi: 2 }, exp: 2500, source: "rule2" }
+        { name: "射手", skills: "シューター", base: { tec: 9, phy: 5, spi: 7 }, exp: 2500, source: "rule2" },
+        { name: "剣士", skills: "フェンサー", base: { tec: 9, phy: 6, spi: 6 }, exp: 2500, source: "rule2" },
+        { name: "拳闘士", skills: "グラップラー", base: { tec: 8, phy: 8, spi: 5 }, exp: 2000, source: "rule2" },
+        { name: "戦士", skills: "ファイター", base: { tec: 7, phy: 9, spi: 5 }, exp: 2000, source: "rule2" },
+        { name: "練体士", skills: "エンハンサー", base: { tec: 6, phy: 8, spi: 7 }, exp: 2500, source: "rule2" },
+        { name: "歌人", skills: "バード", base: { tec: 5, phy: 7, spi: 9 }, exp: 2500, source: "rule2" },
+        { name: "妖精使い", skills: "フェアリーテイマー", base: { tec: 5, phy: 6, spi: 10 }, exp: 2000, source: "rule2" }
     ],
     "elf": [
         { name: "剣士", skills: "フェンサー", base: { tec: 12, phy: 5, spi: 9 }, exp: 2500, source: "rule1" },
@@ -111,7 +117,12 @@ const BACKGROUNDS = {
         { name: "神官", skills: "プリースト", base: { tec: 9, phy: 5, spi: 12 }, exp: 2000, source: "rule1" },
         { name: "操霊術師", skills: "コンジャラー", base: { tec: 9, phy: 4, spi: 13 }, exp: 2000, source: "rule1" },
         { name: "魔術師", skills: "ソーサラー", base: { tec: 10, phy: 3, spi: 13 }, exp: 2000, source: "rule1" },
-        { name: "射手", skills: "シューター", base: { tec: 13, phy: 5, spi: 8 }, exp: 2500, source: "rule1" }
+        { name: "射手", skills: "シューター", base: { tec: 13, phy: 5, spi: 8 }, exp: 2500, source: "rule1" },
+        { name: "練体士", skills: "エンハンサー", base: { tec: 11, phy: 5, spi: 10 }, exp: 2500, source: "rule2" },
+        { name: "密偵", skills: "スカウト", base: { tec: 12, phy: 4, spi: 10 }, exp: 2500, source: "rule2" },
+        { name: "妖精使い", skills: "フェアリーテイマー", base: { tec: 10, phy: 2, spi: 14 }, exp: 2000, source: "rule2" },
+        { name: "拳闘士", skills: "グラップラー", base: { tec: 11, phy: 4, spi: 11 }, exp: 2000, source: "rule2" },
+        { name: "吟遊詩人", skills: "バード", base: { tec: 9, phy: 3, spi: 14 }, exp: 2500, source: "rule2" }
     ],
     "dwarf": [
         { name: "射手", skills: "シューター", base: { tec: 6, phy: 8, spi: 6 }, exp: 2500, source: "rule1" },
@@ -119,34 +130,57 @@ const BACKGROUNDS = {
         { name: "拳闘士", skills: "グラップラー", base: { tec: 5, phy: 10, spi: 5 }, exp: 2000, source: "rule1" },
         { name: "神官", skills: "プリースト", base: { tec: 4, phy: 7, spi: 9 }, exp: 2000, source: "rule1" },
         { name: "魔動機師", skills: "マギテック", base: { tec: 6, phy: 7, spi: 7 }, exp: 2000, source: "rule1" },
+        { name: "学者", skills: "セージ", base: { tec: 3, phy: 8, spi: 9 }, exp: 2500, source: "rule2" },
+        { name: "野伏", skills: "レンジャー", base: { tec: 6, phy: 9, spi: 5 }, exp: 2500, source: "rule2" },
+        { name: "練体士", skills: "エンハンサー", base: { tec: 5, phy: 9, spi: 6 }, exp: 2500, source: "rule2" },
+        { name: "吟遊詩人", skills: "バード", base: { tec: 4, phy: 8, spi: 8 }, exp: 2500, source: "rule2" },
+        { name: "妖精使い", skills: "フェアリーテイマー", base: { tec: 5, phy: 6, spi: 9 }, exp: 2000, source: "rule2" }
     ],
     "tabbit": [
         { name: "操霊術師", skills: "コンジャラー", base: { tec: 6, phy: 6, spi: 10 }, exp: 2000, source: "rule1" },
         { name: "魔術師", skills: "ソーサラー", base: { tec: 5, phy: 7, spi: 10 }, exp: 2000, source: "rule1" },
         { name: "学者", skills: "セージ", base: { tec: 5, phy: 8, spi: 9 }, exp: 2500, source: "rule1" },
         { name: "魔動機師", skills: "マギテック", base: { tec: 8, phy: 5, spi: 9 }, exp: 2000, source: "rule1" },
-        { name: "職人", skills: "なし", base: { tec: 5, phy: 4, spi: 3 }, exp: 2000, source: "rule2" }
+        { name: "魔導師", skills: "ソーサラー＆コンジャラー", base: { tec: 5, phy: 6, spi: 11 }, exp: 1000, source: "rule2" },
+        { name: "妖精使い", skills: "フェアリーテイマー", base: { tec: 7, phy: 5, spi: 10 }, exp: 2000, source: "rule2" },
+        { name: "吟遊詩人", skills: "バード", base: { tec: 6, phy: 7, spi: 9 }, exp: 2500, source: "rule2" },
+        { name: "薬師", skills: "レンジャー", base: { tec: 7, phy: 6, spi: 9 }, exp: 2500, source: "rule2" }
     ],
     "rune_folk": [
         { name: "学者", skills: "セージ", base: { tec: 8, phy: 10, spi: 8 }, exp: 2500, source: "rule1" },
         { name: "射手", skills: "シューター", base: { tec: 12, phy: 8, spi: 6 }, exp: 2500, source: "rule1" },
         { name: "戦士", skills: "ファイターorグラップラー", base: { tec: 9, phy: 12, spi: 5 }, exp: 2000, source: "rule1" },
         { name: "魔動機師", skills: "マギテック", base: { tec: 12, phy: 8, spi: 6 }, exp: 2000, source: "rule1" },
-        { name: "魔術師", skills: "ソーサラー", base: { tec: 9, phy: 8, spi: 9 }, exp: 2000, source: "rule1" }
+        { name: "魔術師", skills: "ソーサラー", base: { tec: 9, phy: 8, spi: 9 }, exp: 2000, source: "rule1" },
+        { name: "密偵", skills: "スカウト", base: { tec: 12, phy: 6, spi: 8 }, exp: 2500, source: "rule2" },
+        { name: "練体士", skills: "エンハンサー", base: { tec: 10, phy: 8, spi: 8 }, exp: 2500, source: "rule2" },
+        { name: "軽戦士", skills: "フェンサー", base: { tec: 11, phy: 9, spi: 6 }, exp: 2500, source: "rule2" },
+        { name: "吟遊詩人", skills: "バード", base: { tec: 8, phy: 9, spi: 9 }, exp: 2500, source: "rule2" },
+        { name: "操霊術師", skills: "コンジャラー", base: { tec: 7, phy: 9, spi: 10 }, exp: 2000, source: "rule2" }
     ],
     "nightmare": [
         { name: "魔術師", skills: "ソーサラー", base: { tec: 5, phy: 13, spi: 12 }, exp: 2000, source: "rule1" },
         { name: "傭兵", skills: "ファイターorグラップラー", base: { tec: 7, phy: 15, spi: 8 }, exp: 2000, source: "rule1" },
         { name: "軽戦士", skills: "フェンサー＆スカウト", base: { tec: 11, phy: 13, spi: 6 }, exp: 2000, source: "rule1" },
         { name: "神官", skills: "プリースト", base: { tec: 6, phy: 14, spi: 10 }, exp: 2000, source: "rule1" },
-        { name: "魔動機師", skills: "マギテック", base: { tec: 9, phy: 9, spi: 12 }, exp: 2000, source: "rule1" }
+        { name: "魔動機師", skills: "マギテック", base: { tec: 9, phy: 9, spi: 12 }, exp: 2000, source: "rule1" },
+        { name: "吟遊詩人", skills: "バード", base: { tec: 8, phy: 13, spi: 9 }, exp: 2500, source: "rule2" },
+        { name: "練体士", skills: "エンハンサー", base: { tec: 9, phy: 14, spi: 7 }, exp: 2500, source: "rule2" },
+        { name: "射手", skills: "シューター", base: { tec: 10, phy: 10, spi: 10 }, exp: 2500, source: "rule2" },
+        { name: "野伏", skills: "レンジャー", base: { tec: 9, phy: 12, spi: 9 }, exp: 2500, source: "rule2" },
+        { name: "操霊術師", skills: "コンジャラー", base: { tec: 6, phy: 11, spi: 13 }, exp: 2000, source: "rule2" }
     ],
     "lichant": [
         { name: "密偵", skills: "スカウト", base: { tec: 13, phy: 5, spi: 7 }, exp: 2500, source: "rule1" },
         { name: "戦士", skills: "ファイター", base: { tec: 10, phy: 9, spi: 6 }, exp: 2000, source: "rule1" },
         { name: "拳闘士", skills: "グラップラー", base: { tec: 11, phy: 7, spi: 7 }, exp: 2000, source: "rule1" },
         { name: "軽戦士", skills: "フェンサー", base: { tec: 12, phy: 6, spi: 7 }, exp: 2500, source: "rule1" },
-        { name: "野伏", skills: "レンジャー", base: { tec: 9, phy: 8, spi: 8 }, exp: 2500, source: "rule1" }
+        { name: "野伏", skills: "レンジャー", base: { tec: 9, phy: 8, spi: 8 }, exp: 2500, source: "rule1" },
+        { name: "吟遊詩人", skills: "バード", base: { tec: 8, phy: 9, spi: 8 }, exp: 2500, source: "rule2" },
+        { name: "射手", skills: "シューター", base: { tec: 11, phy: 8, spi: 6 }, exp: 2500, source: "rule2" },
+        { name: "練体士", skills: "エンハンサー", base: { tec: 10, phy: 8, spi: 7 }, exp: 2500, source: "rule2" },
+        { name: "学者", skills: "セージ", base: { tec: 10, phy: 7, spi: 8 }, exp: 2500, source: "rule2" },
+        { name: "神官", skills: "プリースト", base: { tec: 9, phy: 7, spi: 9 }, exp: 2000, source: "rule2" }
     ]
 
     // 必要な種族を順次ここに追加してください。
