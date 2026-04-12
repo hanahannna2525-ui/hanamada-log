@@ -139,21 +139,34 @@ document.addEventListener('DOMContentLoaded', function() {
         return `<span style="color: #2196f3;">🔵 Dランク（愛と気合でカバー！）</span>`;
     }
 
-    // ▼ 能力値からおすすめのロールを判定する関数
-    function getAdvice(dice) {
-        const tags = [];
-        if (dice['C'] >= 12) tags.push("💪 筋力が高い！前衛アタッカーの素質があります。");
-        if (dice['D'] >= 12) tags.push("🛡️ 生命力が高く、打たれ強いです。前衛や壁役に適しています。");
-        if (dice['A'] >= 12) tags.push("🎯 器用度が高く、弓や投擲、スカウト技能と相性が良いです。");
-        if (dice['B'] >= 12) tags.push("💨 敏捷度が高い！先制攻撃や回避盾として輝けます。");
-        if (dice['E'] >= 12) tags.push("🧠 知力が高く、魔法使い（ソーサラーなど）として大成するでしょう。");
-        if (dice['F'] >= 12) tags.push("✨ 精神力が高く、プリーストや妖精使いに向いています。");
+    function getAdvice(dice, raceName) {
+        const total = Object.values(dice).reduce((a, b) => a + b, 0);
+        const avg = total / 6;
 
-        if (tags.length === 0) {
-            return "バランスの良い数値です！どんな役割にもなれる万能型ですね。";
+        let advice = `<strong>【${raceName}：能力傾向分析】</strong><br>`;
+
+        let high = [];
+        if (dice['A'] >= 13 || dice['B'] >= 13) high.push("敏捷・技巧的（先制や回避、スカウト向き）");
+        if (dice['C'] >= 13 || dice['D'] >= 13) high.push("肉体派（前衛戦闘、タフネス向き）");
+        if (dice['E'] >= 13 || dice['F'] >= 13) high.push("精神・知的（魔法、信仰、錬金術向き）");
+
+        if (high.length > 0) {
+            advice += `特筆すべき適性：${high.join("、")}が伸びやすい傾向です。<br>`;
+        } else {
+            advice += `非常にバランスの良い数値です。どの道へ進んでも無難にこなせます。<br>`;
         }
 
-        return `<strong>能力からのオススメ適性：</strong><br><ul><li>${tags.join("</li><li>")}</li></ul>`;
+        let low = [];
+        if (dice['E'] <= 9) low.push("知力：魔法行使や知識判定で苦労するかもしれません");
+        if (dice['F'] <= 9) low.push("精神：MP管理や精神抵抗に注意が必要です");
+        if (dice['D'] <= 9) low.push("生命：HPが伸び悩むので、後衛か回避重視が安全です");
+
+        if (low.length > 0) {
+            advice += `<br><strong>⚠️ 注意点:</strong><br><ul><li>${low.join("</li><li>")}</li></ul>`;
+        }
+
+        advice += `<br><small>※この能力値なら、ルールブックの「生まれ表」で<br><strong>「この長所を伸ばす」</strong>か<strong>「この短所を補う」</strong>生まれを選ぶのがオススメです！</small>`;
+        return advice;
     }
 
     // ▼ ダイスを振る処理 ▼
@@ -219,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 selectedDiceDisplay.innerHTML = html;
                 selectedDiceSection.style.display = 'block';
 
-                const advice = getAdvice(keptDiceData);
+                const advice = getAdvice(keptDiceData, selectedRace.name);
                 if (adviceDisplay) adviceDisplay.innerHTML = advice;
                 
                 // 見た目を変える
