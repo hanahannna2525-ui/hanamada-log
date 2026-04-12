@@ -37,6 +37,12 @@ document.addEventListener('DOMContentLoaded', function() {
         raceInfoContainer.style.display = 'none';
         diceSection.style.display = 'none';
         selectedDiceSection.style.display = 'none';
+        const jobSection = document.getElementById('job-diagnosis-section');
+        if(jobSection) jobSection.style.display = 'none';
+        const jobAdvice = document.getElementById('job-advice-display');
+        if(jobAdvice) { jobAdvice.style.display = 'none'; jobAdvice.innerHTML = ''; }
+        const finalStatus = document.getElementById('final-status-display');
+        if(finalStatus) finalStatus.innerHTML = '';
         diceResults.innerHTML = '';
         selectedDiceDisplay.innerHTML = '';
         if (adviceDisplay) adviceDisplay.innerHTML = '';
@@ -231,6 +237,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 selectedDiceDisplay.innerHTML = html;
                 selectedDiceSection.style.display = 'block';
+                document.getElementById('job-diagnosis-section').style.display = 'block';
+                document.getElementById('final-status-display').innerHTML = '';
+                document.getElementById('job-advice-display').style.display = 'none';
 
                 const advice = getAdvice(keptDiceData, selectedRace.name);
                 if (adviceDisplay) adviceDisplay.innerHTML = advice;
@@ -242,7 +251,78 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+// ==========================================
+    // ▼ 職業体験・適性診断ロジック
+    // ==========================================
+    const calcJobBtn = document.getElementById('calc-job-btn');
+    const baseTecInput = document.getElementById('base-tec');
+    const basePhyInput = document.getElementById('base-phy');
+    const baseSpiInput = document.getElementById('base-spi');
+    const finalStatusDisplay = document.getElementById('final-status-display');
+    const jobAdviceDisplay = document.getElementById('job-advice-display');
 
+    if (calcJobBtn) {
+    calcJobBtn.addEventListener('click', function() {
+        if (!keptDiceData) { alert('先に能力値ダイスを決定してください！'); return; }
+
+        const tec = parseInt(baseTecInput.value, 10) || 0;
+        const phy = parseInt(basePhyInput.value, 10) || 0;
+        const spi = parseInt(baseSpiInput.value, 10) || 0;
+
+        const stats = {
+            '器用度': tec + keptDiceData['A'], '敏捷度': tec + keptDiceData['B'],
+            '筋力': phy + keptDiceData['C'], '生命力': phy + keptDiceData['D'],
+            '知力': spi + keptDiceData['E'], '精神力': spi + keptDiceData['F']
+        };
+
+        // 【診断生成】
+        let analysis = [];
+        let concerns = [];
+
+        // 1. 能力値の強み・弱み判定
+        for (const [name, val] of Object.entries(stats)) {
+            if (val >= 18) analysis.push(`<strong>${name}</strong>が非常に高いです。この能力を活かせる技能で輝けるでしょう。`);
+            else if (val <= 10) concerns.push(`<strong>${name}</strong>が少し低めです。装備や魔法でカバーを検討してください。`);
+        }
+
+        // 2. 成長アドバイス（6の倍数あと1を複数対応）
+        let nextBreak = [];
+        for (const [key, val] of Object.entries(stats)) {
+            if (val % 6 === 5) nextBreak.push(key);
+        }
+
+        // 3. ワンポイント・アドバイス
+        const tips = [
+            "「判定」に迷ったら、まずは得意な能力にボーナスが付く技能を優先して上げると成長が実感しやすいですよ。",
+            "HPやMPが低い時は、無理せず「魔法のアイテム」を一つ持っておくだけで安心感が段違いです。",
+            "能力値が低い場所は「弱点」ではなく「味方に助けてもらうためのチャームポイント」と考えましょう！",
+            "戦闘ではダイス目も大切ですが、味方との連携でボーナスをもらうのが一番の近道です。"
+        ];
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+
+        // 【HTML出力】
+        let html = `<h4>📊 能力診断レポート</h4>`;
+        
+        if (analysis.length > 0) html += `<p><strong>長所:</strong><br>${analysis.join('<br>')}</p>`;
+        if (concerns.length > 0) html += `<p><strong>補うべき弱点:</strong><br>${concerns.join('<br>')}</p>`;
+        else html += `<p>致命的な弱点は見当たりません！とてもバランスの良いステータスです。</p>`;
+
+        if (nextBreak.length > 0) {
+            html += `<div style="background:#e3f2fd; padding:10px; margin:10px 0; border-radius:5px;">
+                     <strong>💡 あと少しで成長！(ボーナス+1のチャンス)</strong><br>
+                     ${nextBreak.join('、')} が、あと「1」上がれば能力ボーナスが強化されます。<br>
+                     成長の優先順位として覚えておくと便利です！
+                     </div>`;
+        }
+
+        html += `<div style="border-top:1px solid #ccc; padding-top:10px; font-size:0.9em; color:#555;">
+                 <strong>💡 ワンポイント:</strong> ${randomTip}
+                 </div>`;
+
+        jobAdviceDisplay.innerHTML = html;
+        jobAdviceDisplay.style.display = 'block';
+    });
+    }
 
     // ==========================================
     // ▼ フレーバー（経歴・理由）ロジック

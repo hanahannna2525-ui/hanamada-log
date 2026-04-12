@@ -68,6 +68,28 @@
                             ※これをメモして、ルールブックの「生まれ表」を参照し、基礎値（技・体・心）を足して最終的な能力値を計算してください！
                         </p>
                     </div>
+
+                    <!-- 職業適性診断セクション（ダイス決定後に表示） -->
+                    <div class="tool-box" id="job-diagnosis-section" style="display:none; background: #fff5e6; border: 2px solid #ffb74d; margin-top: 15px;">
+                        <h3>🔮 職業体験・適性診断</h3>
+                        <p style="font-size: 0.9em; color: #555;">
+                            ルールブックの「生まれ表」を見て、基礎値（技・体・心）を入力してください。<br>
+                            最終的な能力値を計算し、どの職業（技能）で活躍できそうかツールが診断します！
+                        </p>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center;">
+                            <label><strong>技:</strong> <input type="number" id="base-tec" style="width: 60px; padding: 5px;" min="1" max="15" placeholder="例: 5"></label>
+                            <label><strong>体:</strong> <input type="number" id="base-phy" style="width: 60px; padding: 5px;" min="1" max="15" placeholder="例: 5"></label>
+                            <label><strong>心:</strong> <input type="number" id="base-spi" style="width: 60px; padding: 5px;" min="1" max="15" placeholder="例: 5"></label>
+                            <button id="calc-job-btn" class="social-btn" style="padding: 5px 15px; background: #ff9800;">✨ 適性を診断する！</button>
+                        </div>
+
+                        <!-- 最終能力値とボーナスの表示場所 -->
+                        <div id="final-status-display" style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                        <!-- 診断結果のアドバイス表示場所 -->
+                        <div id="job-advice-display" style="padding: 10px; background: #fff; border-radius: 5px; border: 1px dashed #ffb74d; display:none;"></div>
+                    </div>
+
                 </div>
 
                 <div id="race-description" class="info-box" style="display:none; margin-top: 10px; padding: 10px; background: #f0f0f0;"></div>
