@@ -128,12 +128,26 @@ const BACKGROUNDS = {
         { name: "職人", skills: "なし", base: { tec: 5, phy: 4, spi: 3 }, exp: 2000, source: "rule2" }
     ],
     "rune_folk": [
-        { name: "学者", skills: "セージ", base: { tec: 5, phy: 10, spi: 5 }, exp: 2000, source: "rule1" },
-        { name: "射手", skills: "シューター", base: { tec: 6, phy: 9, spi: 5 }, exp: 2000, source: "rule1" },
-        { name: "戦士", skills: "ファイターorグラップラー", base: { tec: 4, phy: 7, spi: 9 }, exp: 2000, source: "rule1" },
-        { name: "魔動機師", skills: "マギテック", base: { tec: 6, phy: 7, spi: 7 }, exp: 2000, source: "rule1" },
-        { name: "魔術師", skills: "ソーサラー", base: { tec: 7, phy: 8, spi: 6 }, exp: 2500, source: "rule1" }
+        { name: "学者", skills: "セージ", base: { tec: 8, phy: 10, spi: 8 }, exp: 2500, source: "rule1" },
+        { name: "射手", skills: "シューター", base: { tec: 12, phy: 8, spi: 6 }, exp: 2500, source: "rule1" },
+        { name: "戦士", skills: "ファイターorグラップラー", base: { tec: 9, phy: 12, spi: 5 }, exp: 2000, source: "rule1" },
+        { name: "魔動機師", skills: "マギテック", base: { tec: 12, phy: 8, spi: 6 }, exp: 2000, source: "rule1" },
+        { name: "魔術師", skills: "ソーサラー", base: { tec: 9, phy: 8, spi: 9 }, exp: 2000, source: "rule1" }
     ],
+    "nightmare": [
+        { name: "魔術師", skills: "ソーサラー", base: { tec: 5, phy: 13, spi: 12 }, exp: 2000, source: "rule1" },
+        { name: "傭兵", skills: "ファイターorグラップラー", base: { tec: 7, phy: 15, spi: 8 }, exp: 2000, source: "rule1" },
+        { name: "軽戦士", skills: "フェンサー＆スカウト", base: { tec: 11, phy: 13, spi: 6 }, exp: 2000, source: "rule1" },
+        { name: "神官", skills: "プリースト", base: { tec: 6, phy: 14, spi: 10 }, exp: 2000, source: "rule1" },
+        { name: "魔動機師", skills: "マギテック", base: { tec: 9, phy: 9, spi: 12 }, exp: 2000, source: "rule1" }
+    ],
+    "lichant": [
+        { name: "密偵", skills: "スカウト", base: { tec: 13, phy: 5, spi: 7 }, exp: 2500, source: "rule1" },
+        { name: "戦士", skills: "ファイター", base: { tec: 10, phy: 9, spi: 6 }, exp: 2000, source: "rule1" },
+        { name: "拳闘士", skills: "グラップラー", base: { tec: 11, phy: 7, spi: 7 }, exp: 2000, source: "rule1" },
+        { name: "軽戦士", skills: "フェンサー", base: { tec: 12, phy: 6, spi: 7 }, exp: 2500, source: "rule1" },
+        { name: "野伏", skills: "レンジャー", base: { tec: 9, phy: 8, spi: 8 }, exp: 2500, source: "rule1" }
+    ]
 
     // 必要な種族を順次ここに追加してください。
 };
@@ -156,7 +170,7 @@ const FLAVOR_DATA = {
         "大切な人と生き別れている",
         "絶対に知られたくない秘密がある",
         "神の声を聞いたことがある",
-        "大失恋したことがある"
+        "自殺を試みたことがある"
     ],
     reasons: [
         "お金を稼ぐため",
