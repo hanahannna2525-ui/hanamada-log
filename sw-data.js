@@ -1,0 +1,175 @@
+// sw-data.js (データ管理)
+
+const RACES = {
+    "human": {
+        name: "人間",
+        source: "rule1",
+        feature: "【剣の加護／運命変転】ダイス目を反転することができます。（ルルブⅠ p.65）",
+        description: "ラクシアで最も数が多く、どの技能にも適性があります",
+        appearance: "髪や瞳の色は多種多様で、地域によって様々な特徴を持ちます。現実世界の人間とあまり変わりません。",
+        age: "成人：15歳 ／ 寿命：約100年",
+        // ▼ 修正：" " で囲み、d6 と書く ▼
+        dice: { A: "2d6", B: "2d6", C: "2d6", D: "2d6", E: "2d6", F: "2d6" }
+    },
+    "elf": {
+        name: "エルフ",
+        source: "rule1",
+        feature: "【暗視】暗闇でも昼間のように見ることができます。【剣の加護／優しき水】水中での活動に制限が少ないです。（ルルブⅠ p.66）",
+        description: "魔法が得意で長い人生をゆったりと楽しんでいます。素早くて器用な者も多いです。",
+        appearance: "人間よりも背が高く、美しくて優美な姿をしています。",
+        age: "成人：15歳 ／ 寿命：約500年",
+        // ▼ 修正：" " で囲み、d6 と書く ▼
+        dice: { A: "2d6", B: "2d6", C: "1d6", D: "2d6", E: "2d6", F: "2d6" } 
+    },
+    "dwarf": {
+        name: "ドワーフ",
+        source: "rule1",
+        feature: "【暗視】暗闇でも昼間のように見ることができます。【剣の加護／炎身】炎に対する耐性が非常に高いです。（ルルブⅠ p.67）",
+        description: "頑固で一本気、仲間思いな性格が多いです。より強くなろうと己を鍛える種族性があります。",
+        appearance: "小柄ながら男性は濃い髭を生やしガッシリした体格。女性は人間の少女に似た姿でほとんどふけません。",
+        age: "成人：15歳 ／ 寿命：約200年",
+        // ▼ 修正：" " で囲み、d6 と書く（+6 のような計算も中に入れる） ▼
+        dice: { A: "2d6+6", B: "1d6", C: "1d6", D: "2d6", E: "1d6", F: "2d6+6" } 
+    },
+    "tabbit": {
+        name: "タビット",
+        source: "rule1",
+        feature: "【第六感】危険を察知する能力に長けています。（ルルブⅠ p.68）",
+        description: "魔法に優れた才能がありますが、種族の呪いでプリーストの魔法が使えません。手足が短いため動きは少し不器用です。",
+        appearance: "身長1ｍ前後の直立したウサギのような姿をしています。肉球もあり、体毛の色も様々です。",
+        age: "成人：10歳 ／ 寿命：約50年",
+        // ▼ 追加：人間以外は振る個数が違う（例としてCが1d6） ▼
+        dice: { A: "1d6", B: "1d6", C: "1d6", D: "2d6", E: "2d6+6", F: "2d6" } 
+    },
+    "rune_folk": {
+        name: "ルーンフォーク",
+        source: "rule1",
+        feature: "【暗視】暗闇でも昼間のように見ることができます。【ＨＰ変換】HPを消費してMPを回復することができます。（ルルブⅠ p.69）",
+        description: "筋力と器用さに優れた人造人間です。神の声が聞こえないためプリーストにはなれませんが、優れた戦闘能力を持っています。",
+        appearance: "人間とほぼ同じ見た目と肉体構造をしていますが、首や身体の一部が硬質素材で覆われています。",
+        age: "成人：生まれた時からこの姿です ／ 寿命：約50年は安定しますが、それ以降は突然機能停止することがあります。",
+        // ▼ 追加：人間以外は振る個数が違う（例としてCが1d6） ▼
+        dice: { A: "2d6", B: "1d6", C: "2d6", D: "2d6", E: "2d6", F: "1d6" } 
+    },
+    "nightmare": {
+        name: "ナイトメア",
+        source: "rule1",
+        feature: "【異貌】姿を変え能力をアップできます。【弱点】銀の武器及び特定属性の攻撃でより多くのダメージを受けます。（ルルブⅠ p.70）",
+        description: "人間、エルフ、ドワーフ、リルドラケンから生まれる特別変異で、生まれながら魂に穢れを持っています。",
+        appearance: "生まれの種族とほとんど変わりませんが、穢れし者特有の角や痣、極端な色白などの特徴を持つことが多いです。",
+        age: "成人：15歳 ／ 寿命：老衰で死んだ記録はありません",
+        // ▼ 追加：人間以外は振る個数が違う（例としてCが1d6） ▼
+        dice: { A: "2d6", B: "2d6", C: "1d6", D: "1d6", E: "2d6", F: "2d6" } 
+    },
+    "lichant": {
+        name: "リカント",
+        source: "rule1",
+        feature: "【暗視（獣変貌）】暗闇でも昼間のように見ることができます。（獣変貌時のみ）【獣変貌】頭部を獣に変貌させ、筋力をアップさせます。（ルルブⅠ p.71）",
+        description: "頭部を肉食獣の姿に変化させる能力を持ちます。筋力は上がりますが、声帯も変化するため変貌時は魔法を使うことができなくなってしまいます。",
+        appearance: "細身ながら筋肉質、豊かな体毛に覆われた耳と尻尾があります。",
+        age: "成人：15歳 ／ 寿命：約150年",
+        // ▼ 追加：人間以外は振る個数が違う（例としてCが1d6） ▼
+        dice: { A: "1d6", B: "1d6+3", C: "2d6", D: "2d6", E: "1d6+6", F: "1d6" } 
+    },
+    "grassrunner": {
+        name: "グラスランナー",
+        source: "rule2",
+        feature: "【マナ不干渉】MPを持たず、魔法が使えません。（ルルブⅡ p.xx）",
+        description: "自然と深く結びついた種族で、魔法に弱いですが、他の能力は高いです。",
+        appearance: "細身で素早く、自然に溶け込むような行動をします。",
+        age: "成人：50歳 ／ 寿命：約300年",
+        dice: { A: "2d6", B: "2d6", C: "1d6", D: "2d6", E: "1d6", F: "2d6" } 
+    },
+    "lepuchaun": {
+        name: "レプラカーン",
+        source: "rule3",
+        feature: "【暗視】【見えざる手】（ルルブⅢ p.xx）",
+        description: "神秘的な力を持つ種族で、魔法に強く、戦闘能力も高いです。",
+        appearance: "細身で強靭で、目は赤い色が目立つことが多いです。",
+        age: "成人：200歳 ／ 寿命：約1000年",
+        dice: { A: "2d6", B: "2d6", C: "2d6", D: "1d6", E: "2d6", F: "1d6" }
+    }
+};
+
+// sw-data.js の末尾に追加
+
+const BACKGROUNDS = {
+    "human": [
+        { name: "魔動機師", skills: "マギテック", base: { tec: 8, phy: 4, spi: 9 }, exp: 2000, source: "rule1" },
+        { name: "魔術師", skills: "ソーサラー", base: { tec: 6, phy: 5, spi: 10 }, exp: 2000, source: "rule1" },
+        { name: "軽戦士", skills: "スカウト＆フェンサー", base: { tec: 10, phy: 7, spi: 4 }, exp: 2000, source: "rule1" },
+        { name: "一般人", skills: "なし", base: { tec: 7, phy: 7, spi: 7 }, exp: 3000, source: "rule1" },
+        { name: "傭兵", skills: "ファイターorグラップラー", base: { tec: 7, phy: 10, spi: 4 }, exp: 2000, source: "rule1" },
+        { name: "神官", skills: "プリースト", base: { tec: 4, phy: 8, spi: 9 }, exp: 2000, source: "rule1" },
+        { name: "操霊術師", skills: "コンジャラー", base: { tec: 7, phy: 4, spi: 10 }, exp: 2000, source: "rule1" },
+        // ルルブ2の追加生まれの例
+        { name: "野伏", skills: "レンジャー1レベル", base: { tec: 5, phy: 5, spi: 2 }, exp: 2500, source: "rule2" }
+    ],
+    "elf": [
+        { name: "剣士", skills: "フェンサー", base: { tec: 12, phy: 5, spi: 9 }, exp: 2500, source: "rule1" },
+        { name: "薬師", skills: "セージ＆レンジャー", base: { tec: 10, phy: 5, spi: 11 }, exp: 2000, source: "rule1" },
+        { name: "神官", skills: "プリースト", base: { tec: 9, phy: 5, spi: 12 }, exp: 2000, source: "rule1" },
+        { name: "操霊術師", skills: "コンジャラー", base: { tec: 9, phy: 4, spi: 13 }, exp: 2000, source: "rule1" },
+        { name: "魔術師", skills: "ソーサラー", base: { tec: 10, phy: 3, spi: 13 }, exp: 2000, source: "rule1" },
+        { name: "射手", skills: "シューター", base: { tec: 13, phy: 5, spi: 8 }, exp: 2500, source: "rule1" }
+    ],
+    "dwarf": [
+        { name: "射手", skills: "シューター", base: { tec: 6, phy: 8, spi: 6 }, exp: 2500, source: "rule1" },
+        { name: "戦士", skills: "ファイター", base: { tec: 4, phy: 11, spi: 5 }, exp: 2000, source: "rule1" },
+        { name: "拳闘士", skills: "グラップラー", base: { tec: 5, phy: 10, spi: 5 }, exp: 2000, source: "rule1" },
+        { name: "神官", skills: "プリースト", base: { tec: 4, phy: 7, spi: 9 }, exp: 2000, source: "rule1" },
+        { name: "魔動機師", skills: "マギテック", base: { tec: 6, phy: 7, spi: 7 }, exp: 2000, source: "rule1" },
+    ],
+    "tabbit": [
+        { name: "操霊術師", skills: "コンジャラー", base: { tec: 6, phy: 6, spi: 10 }, exp: 2000, source: "rule1" },
+        { name: "魔術師", skills: "ソーサラー", base: { tec: 5, phy: 7, spi: 10 }, exp: 2000, source: "rule1" },
+        { name: "学者", skills: "セージ", base: { tec: 5, phy: 8, spi: 9 }, exp: 2500, source: "rule1" },
+        { name: "魔動機師", skills: "マギテック", base: { tec: 8, phy: 5, spi: 9 }, exp: 2000, source: "rule1" },
+        { name: "職人", skills: "なし", base: { tec: 5, phy: 4, spi: 3 }, exp: 2000, source: "rule2" }
+    ],
+    "rune_folk": [
+        { name: "学者", skills: "セージ", base: { tec: 5, phy: 10, spi: 5 }, exp: 2000, source: "rule1" },
+        { name: "射手", skills: "シューター", base: { tec: 6, phy: 9, spi: 5 }, exp: 2000, source: "rule1" },
+        { name: "戦士", skills: "ファイターorグラップラー", base: { tec: 4, phy: 7, spi: 9 }, exp: 2000, source: "rule1" },
+        { name: "魔動機師", skills: "マギテック", base: { tec: 6, phy: 7, spi: 7 }, exp: 2000, source: "rule1" },
+        { name: "魔術師", skills: "ソーサラー", base: { tec: 7, phy: 8, spi: 6 }, exp: 2500, source: "rule1" }
+    ],
+
+    // 必要な種族を順次ここに追加してください。
+};
+
+// sw-data.js の一番下に追加
+
+const FLAVOR_DATA = {
+    histories: [
+        "家族に冒険者がいる（いた）",
+        "命を救われたことがある",
+        "大怪我をしたことがある",
+        "一定期間の記憶がない",
+        "特定の異種族を好んでいる",
+        "親が偉大な人だった",
+        "役に立たない知識を知っている",
+        "奇妙な予言をされたことがある",
+        "本から大きな影響を受けた",
+        "投獄されたことがある",
+        "忘れられない恐怖を体験した",
+        "大切な人と生き別れている",
+        "絶対に知られたくない秘密がある",
+        "神の声を聞いたことがある",
+        "大失恋したことがある"
+    ],
+    reasons: [
+        "お金を稼ぐため",
+        "探している人がいる",
+        "親の期待に応えるため",
+        "借金を返済するため",
+        "神の教えを広めるため",
+        "なんとなく",
+        "最高の武具を求めて",
+        "名声を得るため",
+        "見聞を広めるため",
+        "故郷を滅ぼした者を討つため",
+        "失われた記憶を取り戻すため",
+        "世界を救うため"
+    ]
+};

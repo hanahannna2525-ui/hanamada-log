@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>PC名 - ハナナギログ</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script> 
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main id="main-content">
+        <div class="pc-detail-wrapper">
+            <!-- 戻るボタン -->
+            <div class="back-link">
+                <a href="pcst.html">≪ PC一覧に戻る</a>
+            </div>
+
+            <!-- キャラクター情報ヘッダー -->
+            <div class="pc-header">
+                <h2>キャラクターの名前</h2>
+                
+                <div class="trpg-tags">
+                    <span class="trpg-tag">CoC 6版</span>
+                    <span class="trpg-tag">24歳</span>
+                    <span class="trpg-tag">男性</span>
+                    <span class="trpg-tag">探偵</span>
+                </div>
+
+                <a href="https://iachara.com/..." target="_blank" class="charasheet-btn">🔗 キャラクターシート（外部）</a>
+            </div>
+
+            <!-- ▼▼ 画像エリア ▼▼ -->
+            <div class="pc-image-section">
+                <div class="main-image">
+                    <img src="images/Murder MysteryPC/1 (2).webp" alt="メイン立ち絵" class="expandable" id="main-display">
+                </div>
+                <div class="sub-images">
+                    <img src="images/Murder MysteryPC/1 (2).webp" alt="基本" class="thumb-img active">
+                    <img src="images/Murder MysteryPC/5 (2).webp" alt="差分1" class="thumb-img">
+                    <img src="images/Murder MysteryPC/6 (2).webp" alt="差分2" class="thumb-img">
+                </div>
+            </div>
+
+            <!-- ▼▼ クイック・ステータスバー ▼▼ -->
+            <div class="quick-status-board">
+                <!-- HP/MP -->
+                <div class="status-row">
+                    <div class="status-item hp-box"><strong>HP</strong> <span id="disp-hp"></span> / <span id="disp-disp-hp-max"></span></div>
+                    <div class="status-item mp-box"><strong>MP</strong> <span id="disp-mp"></span> / <span id="disp-disp-mp-max"></span></div>
+                </div>
+
+                <!-- 探索用パッケージ -->
+                <div class="status-package-row">
+                    <div class="pkg-item"><strong>技巧</strong><br>+8</div>
+                    <div class="pkg-item"><strong>運動</strong><br>+7</div>
+                    <div class="pkg-item"><strong>観察</strong><br>+8</div>
+                    <div class="pkg-item"><strong>知識</strong><br>+11</div>
+                </div>
+                <div class="status-note">
+                    📝 <strong>知識:</strong> 薬品・賦術系は+13 (アルケミスト)
+                </div>
+                <hr class="status-divider"> <!-- 視覚的に区切る線（CSSでお好みで） -->
+
+                <!-- 戦闘用ステータス -->
+                <div class="status-grid">
+                    <div class="grid-item"><strong>生命抵抗</strong><br><span id="disp-vit"></span></div>
+                    <div class="grid-item"><strong>精神抵抗</strong><br><span id="disp-mnd"></span></div>
+                    <div class="grid-item"><strong>先制力</strong><br><span id="disp-ini"></span></div>
+                    <div class="grid-item"><strong>魔物知識</strong><br><span id="disp-kno"></span></div>
+                    
+                    <div class="grid-item target-box"><strong>命中力</strong><br><span id="disp-hit"></span></div>
+                    <div class="grid-item target-box"><strong>回避力</strong><br><span id="disp-eva"></span></div>
+                    <div class="grid-item target-box"><strong>防護点</strong><br><span id="disp-def"></span></div>
+                    <div class="grid-item target-box"><strong>魔力</strong><br><span id="disp-mag"></span></div>
+                </div>
+
+                <!-- 戦闘用注釈メモ -->
+                <div class="status-note">
+                    📝 <strong>魔物知識:</strong> 【弱点看破】成功で弱点適用 
+                </div>
+                <div class="status-note">
+                    📝 <strong>魔力撃:</strong> 命中+1 ＆ ダメ+2(回避・抵抗-1)
+                </div>
+
+                <!-- リソースメモ -->
+                <div class="resource-quick-memo">
+                    <div class="memo-line">
+                        <strong>💥 弱点：</strong>土属性ダメージ+3
+                    </div>
+                    <div class="memo-line">
+                        <strong>💥 耐性：</strong>炎ダメージ-3 / 毒無効
+                    </div>
+                </div>
+            </div>
+
+            <!-- ▼▼ ボイスエリア ▼▼ -->
+            <!-- ※コピーボタンがつかないよう専用のクラスにしています -->
+            <details class="voice-accordion">
+                <summary>🔊 サンプルボイス</summary>
+                <div class="voice-content">
+                    <p class="voice-quote">「俺は〇〇探偵事務所の所長だ。……で、依頼ってのは何だ？」</p>
+                    <audio controls class="custom-audio" preload="none">
+                        <!-- <source src="voices/pc01_sample.mp3" type="audio/mpeg"> -->
+                    </audio>
+                    <p class="voice-coming-soon">※現在ボイス準備中...</p>
+                </div>
+            </details>
+            <!-- ▲▲ ボイスエリア ここまで ▲▲ -->
+
+            <!-- ▼▼ ここから下、設定などのテキストエリア ▼▼ -->
+
+            <!-- 1. 基本データ・能力値・各種判定 -->
+            <details class="spoiler-box" open>
+                <summary>📊 基本データ・能力値・判定</summary>
+                <button class="copy-btn" data-target="status-text">データをコピー</button>
+                <div id="status-text" class="spoiler-content">【経験点】
+使用経験点：72,000
+残り経験点：3,000
+総計経験点：75,000 (うち1ゾロ分: 0)
+
+【基本データ】
+冒険者レベル：11
+穢れ度　　　：1
+
+ＨＰ　　：<span id="val-hp">62</span> (基本45 + 頑強15 + 専用化2)
+ＭＰ　　：<span id="val-mp">55</span> (基本55 + 専用化0)
+弱点属性：土属性ダメージ+3
+生命抵抗：<span id="val-vit">13</span>
+精神抵抗：<span id="val-mnd">13</span>
+
+
+【能力値】()内反映済み
+器用度：18 (+3)
+敏捷度：12 (+2)
+筋力　：15 (+2)
+生命力：12 (+2)
+知力　：18 (+3)
+精神力：16 (+2)
+
+【判定パッケージ】
+技巧判定：+8
+運動判定：+7
+観察判定：+8
+知識判定：+11 (セージ8) / +13 (アルケミスト10)
+先制力　：<span id="val-ini">+7</span>
+魔物知識：<span id="val-kno">+11</span>  (セージ8 +知力ボーナス3 + 弱点看破)</div>
+            </details>
+
+            <!-- 2. 技能・特技・魔法 -->
+            <details class="spoiler-box">
+                <summary>⚔️ 技能・特技・魔法</summary>
+                <button class="copy-btn" data-target="skill-text">特技をコピー</button>
+                <div id="skill-text" class="spoiler-content">【冒険者技能】
+フェアリーテイマー：Lv 11
+アルケミスト　　　：Lv 10
+セージ　　　　　　：Lv 8
+ドルイド　　　　　：Lv 2
+
+【一般技能】
+〇〇〇〇：Lv 5
+〇〇〇〇：Lv 2
+
+【魔法・賦術データ】
+妖精魔法(ルルブII P.188, III P.172)
+フェアリーテイマー：11
+魔力:<span id="val-mag">14</span> / 行使:14 / ダメ上昇:+0
+※使用可能ランク11 (土・水・風・光)
+
+森羅魔法(サプリメント「モンストラスロア」P.190)
+ドルイド：2
+魔力:5 / 行使:5 / ダメ上昇:+0
+
+賦術(ルルブIII P.203)
+アルケミスト：10
+使用基準値:13
+
+【戦闘特技】
+回避行動Ⅰ　　 (ルルブI P.286)
+頑強　　　　　 (ルルブI P.284)
+ルーンマスター (ルルブI P.291)
+鋭い目　　　　 (ルルブI P.284)
+弱点看破　　　 (ルルブI P.293)
+他
+
+【流派・秘伝】
+入門流派：〇〇流
+・秘伝：〇〇の型 (効果メモ)
+
+【練技・呪歌・騎芸・賦術など】
+[賦術] ヴォーパルウェポン (補)
+[賦術] クラッシュファング (補/準)
+[賦術] パラライズミスト (補)
+[賦術] アーマーラスト (補)</div>
+            </details>
+
+            <!-- 3. 武具・戦闘データ -->
+            <details class="spoiler-box">
+                <summary>🛡️ 武具・戦闘データ</summary>
+                <button class="copy-btn" data-target="equip-text">装備をコピー</button>
+                <div id="equip-text" class="spoiler-content">【戦闘数値】
+命中力：<span id="val-hit">+14</span>
+回避力：<span id="val-eva">+14</span>
+防護点：<span id="val-def">5</span>
+
+【回避・防護の算出基礎】
+技能　　：技能なし (必筋上限:15)
+特技　　：回避行動Ⅰ (回避+1)
+
+【武器】
+武器名：ガン (カテゴリ:ガン/B)
+用法　：1H / 2H
+命中　：+1
+威力　：
+Ｃ値　：10
+追加Ｄ：+2
+備考　：[専用化:MP+2] / 弾薬メモ
+
+武器名：バスタードソード
+用法　：1H両 / 2H
+命中　：+6
+威力　：17 / 27
+Ｃ値　：10
+追加Ｄ：+8
+備考　：(ルルブI P.286)
+
+【防具】
+鎧：せんようぼうぐ (カテゴリ:非金属鎧/B)[専用化:HP+2]
+盾：せんようたて (カテゴリ:盾/B)[専用化:回避+1]
+
+【装飾品】
+頭　：せんようあくせ[専用化:HP+2]
+顔　：
+耳　：
+首　：
+背中：
+右手：
+左手：
+腰　：
+足　：
+他　：</div>
+            </details>
+
+            <!-- 4. 言語・名誉・所持品 -->
+            <details class="spoiler-box">
+                <summary>🎒 言語・名誉・所持品</summary>
+                <div class="spoiler-content">【所持金】
+現金　：1,500 G
+預金等：100,000 G / 借金：0 G
+
+【名誉点・不名誉点】
+所持名誉点：50
+総計名誉点：375
+不名誉点　：0 (詳細：特になし)
+アビス欠片：3個
+
+【言語】
+交易共通語：会話〇 / 読文〇
+地方語　　：会話〇 / 読文〇
+魔法文明語：会話〇 / 読文〇
+エルフ語　：会話〇 / 読文×
+
+【名誉アイテム】
+冒険者ランク：フランベルジュ (300点)
+装飾品の専用化：頭(せんようあくせ) HP+2 等
+
+【消耗品・リソース】
+魔晶石：5点×2 / 3点×3
+マテリアルカード：
+　赤：B(3) / A(2) / S(1) / SS(0)
+　緑：B(5) / A(1) / S(0) / SS(0)
+　黒：B(0) / A(0) / S(0) / SS(0)
+　白：B(0) / A(0) / S(0) / SS(0)
+　金：B(0) / A(0) / S(0) / SS(0)
+矢弾等：
+
+【所持アイテム】
+冒険者セット
+保存食（10日分）
+魔香草 ×3
+アウェイクポーション ×1
+ヒーリングポーション ×2</div>
+            </details>
+
+            <!-- 5. キャラクター設定・経歴 -->
+            <details class="spoiler-box">
+                <summary>📖 Profile & 設定・経歴表</summary>
+                <button class="copy-btn" data-target="profile-text">設定をコピー</button>
+                <div id="profile-text" class="spoiler-content">性別：男性
+年齢：17歳
+種族：ナイトメア（人間）
+種族特徴：[異貌] [弱点(土)]
+身長：175cm / 体重：65kg
+外見：黒髪 / 蒼眼 / 色白の肌
+生れ：傭兵
+職業：魔法戦士
+信仰：始祖神ライフォス
+
+【経歴・理由】
+Ａ：大家族に生まれた
+Ｂ：大きな挫折をしたことがある
+Ｃ：命を救われたことがある
+理由：恩人に報いるため
+
+一人称：私 / 二人称：君、あなた
+
+アルフレイム大陸のブルライト地方出身の青年。
+実家は子だくさんの農家だったが、幼い頃に魔物の襲撃に遭い冒険者に命を救われた。
+その恩人に憧れ、剣と魔法の両方を叩き込んで冒険者となった。
+基本的には真面目でお人好しだが、少し頑固なところがある。</div>
+            </details>
+
+
+            <!-- 6. セッション履歴（成長記録） -->
+            <details class="spoiler-box">
+                <summary>📜 冒険の履歴（通過シナリオ）</summary>
+                <div class="spoiler-content" style="white-space: normal;">
+                    <ul class="scenario-history">
+                        <li>
+                            <strong>「ゴブリンの洞窟討伐」</strong> <br>
+                            <span style="font-size: 0.9em; color: #555;">経験点:+1000 / ガメル:+1200G / 名誉点:+15 / 成長:筋力</span>
+                        </li>
+                        <li>
+                            <strong>「廃城に眠る秘宝」</strong> <br>
+                            <span style="font-size: 0.9em; color: #555;">経験点:+1500 / ガメル:+2500G / 名誉点:+30 / 成長:知力, 器用度</span>
+                        </li>
+                    </ul>
+                </div>
+            </details>
+
+            <!-- ▼▼ ギャラリー（ポイピク等）エリア ▼▼ -->
+            <details class="voice-accordion">
+                <summary>🎨 イラスト・ポイピク等</summary>
+                <div class="spoiler-content gallery-content">
+                    <p style="margin-bottom: 1rem; font-size: 0.9em; color: #666; text-align: center;">
+                        タイトルからポイピクなどの外部ページへ飛べます
+                    </p>
+                    <div class="gallery-card">
+                        <div class="gallery-header">
+                            <a href="https://poipiku.com/..." target="_blank" class="gallery-link">🔗 パーティ結成記念イラスト</a>
+                        </div>
+                        <div class="gallery-note">
+                            ⚠️ 注意：キャンペーンのネタバレあり
+                        </div>
+                        <div class="gallery-chars">
+                            <span class="chars-label">登場キャラ：</span><a href="pcst.html">自キャラ</a>, <span class="yosonoko">〇〇（PL:〇〇さん）</span>, <span class="yosonoko">△△（PL:△△さん）</span>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- ▼▼ キャラクターPV・関連動画エリア ▼▼ -->
+            <div class="pc-pv-section">
+                <h3 class="pv-section-title">🎬 関連動画・PV</h3>
+                <div class="pv-grid">
+                    <div class="pv-item">
+                        <div class="pv-label">キャンペーンOP風PV</div>
+                        <div class="youtube-wrapper">
+                            <!-- <iframe src="..." frameborder="0" allowfullscreen></iframe> -->
+                            <div class="pv-placeholder"><p>※現在PV準備中...</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="main.js"></script>
+</body>
+</html>

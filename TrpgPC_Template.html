@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>PC名 - ハナナギログ</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script> 
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main id="main-content">
+        <div class="pc-detail-wrapper">
+            <!-- 戻るボタン -->
+            <div class="back-link">
+                <a href="pcst.html">≪ PC一覧に戻る</a>
+            </div>
+
+            <!-- キャラクター情報ヘッダー -->
+            <div class="pc-header">
+                <h2>キャラクターの名前</h2>
+                
+                <div class="trpg-tags">
+                    <span class="trpg-tag">CoC 6版</span>
+                    <span class="trpg-tag">24歳</span>
+                    <span class="trpg-tag">男性</span>
+                    <span class="trpg-tag">探偵</span>
+                </div>
+
+                <a href="https://iachara.com/..." target="_blank" class="charasheet-btn">🔗 キャラクターシート（外部）</a>
+            </div>
+
+            <!-- ▼▼ 画像エリア ▼▼ -->
+            <div class="pc-image-section">
+                <div class="main-image">
+                    <img src="images/Murder MysteryPC/1 (2).webp" alt="メイン立ち絵" class="expandable" id="main-display">
+                </div>
+                <div class="sub-images">
+                    <img src="images/Murder MysteryPC/1 (2).webp" alt="基本" class="thumb-img active">
+                    <img src="images/Murder MysteryPC/5 (2).webp" alt="差分1" class="thumb-img">
+                    <img src="images/Murder MysteryPC/6 (2).webp" alt="差分2" class="thumb-img">
+                </div>
+            </div>
+
+            <!-- ▼▼ 1. ボイスエリア（たためる形式） ▼▼ -->
+            <!-- ※コピーボタンがつかないよう専用のクラスにしています -->
+            <details class="voice-accordion">
+                <summary>🔊 サンプルボイス</summary>
+                <div class="voice-content">
+                    <p class="voice-quote">「俺は〇〇探偵事務所の所長だ。……で、依頼ってのは何だ？」</p>
+                    <audio controls class="custom-audio" preload="none">
+                        <!-- <source src="voices/pc01_sample.mp3" type="audio/mpeg"> -->
+                    </audio>
+                    <p class="voice-coming-soon">※現在ボイス準備中...</p>
+                </div>
+            </details>
+            <!-- ▲▲ ボイスエリア ここまで ▲▲ -->
+
+            <!-- ▼▼ ここから下、設定などのテキストエリア ▼▼ -->
+            <details class="spoiler-box" open>
+                <summary>ステータス</summary>
+                <button class="copy-btn" data-target="status-text">ステータスをコピー</button>
+                <div id="status-text" class="spoiler-content">STR:10 / CON:10 / POW:12 / DEX:14
+APP:15 / SIZ:13 / INT:14 / EDU:16
+
+HP:12 / MP:12 / SAN:60</div>
+            </details>
+
+            <details class="spoiler-box">
+                <summary>Profile & 設定</summary>
+                <button class="copy-btn" data-target="profile-text">設定をコピー</button>
+                <div id="profile-text" class="spoiler-content">一人称：俺 / 二人称：お前、あんた
+好きなもの：コーヒー、猫
+嫌いなもの：面倒事
+
+都内で小さな探偵事務所を営んでいる青年。
+基本的には無気力だが、いざという時は頼りになる（かもしれない）。
+休日はよく近所の野良猫に餌をあげている。</div>
+            </details>
+
+            <details class="spoiler-box">
+                <summary>通過シナリオ</summary>
+                <div class="spoiler-content" style="white-space: normal;">
+                    <ul class="scenario-history">
+                        <li>毒入りスープ （KP：〇〇さん / HO1）</li>
+                        <li>カタシロ （KP：〇〇さん）</li>
+                        <li>狂気山脈 （KP：〇〇さん / HO登山家）</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="spoiler-box">
+                <summary>持ち物</summary>
+                <div class="spoiler-content">もらったアーティファクト：〇〇
+後遺症：〇〇</div>
+            </details>
+
+            <details class="spoiler-box">
+                <summary>⚠️【ネタバレ注意】シナリオ「カタシロ」の結末について</summary>
+                <div class="spoiler-content">エンディング：〇〇
+ここでこういう感情になった、などなど。</div>
+            </details>
+
+            <details class="spoiler-box">
+                <summary>おまけ：別の世界線のIF設定</summary>
+                <div class="spoiler-content">実は裏設定として〇〇という過去があった。</div>
+            </details>
+
+<!-- ▼▼ ギャラリー（ポイピク等）エリア ▼▼ -->
+            <details class="voice-accordion">
+                <summary>🎨 ポイピクリンク</summary>
+                
+                <div class="spoiler-content gallery-content">
+                    <!-- 説明文はココに入れると綺麗に収まります -->
+                    <p style="margin-bottom: 1rem; font-size: 0.9em; color: #666; text-align: center;">
+                        タイトルからポイピクページへ飛べます
+                    </p>
+                    
+                    <!-- カード1（自キャラ単体・R-18の例） -->
+                    <div class="gallery-card">
+                        <div class="gallery-header">
+                            <a href="https://poipiku.com/..." target="_blank" class="gallery-link">🔗 シナリオ〇〇 生還記念イラスト</a>
+                        </div>
+                        <!-- 文章で自由に注意書きを書くエリア -->
+                        <div class="gallery-note">
+                            ⚠️ 注意：R-18 / ネタバレあり
+                        </div>
+                        <div class="gallery-chars">
+                            <span class="chars-label">登場キャラ：</span><a href="pcst.html">自キャラの名前</a>
+                        </div>
+                    </div>
+
+                    <!-- カード2（複数キャラ・うちよその例） -->
+                    <div class="gallery-card">
+                        <div class="gallery-header">
+                            <a href="https://poipiku.com/..." target="_blank" class="gallery-link">🔗 〇〇くんとデートした時の漫画</a>
+                        </div>
+                        <!-- 文章で自由に注意書きを書くエリア -->
+                        <div class="gallery-note">
+                            ⚠️ 注意：うちよそ / 女男（NL）
+                        </div>
+                        <div class="gallery-chars">
+                            <span class="chars-label">登場キャラ：</span><a href="pcst.html">自キャラA</a>, <a href="pcst_another.html">自キャラB（KPC）</a>, <span class="yosonoko">よその子ちゃん（PL:〇〇さん）</span>
+                        </div>
+                    </div>
+
+                </div>
+            </details>
+            <!-- ▲▲ ギャラリーエリア ここまで ▲▲ -->
+
+            <!-- ▼▼ 2. キャラクターPV・関連動画エリア（一番下・複数対応） ▼▼ -->
+            <div class="pc-pv-section">
+                <h3 class="pv-section-title">🎬 関連動画・PV</h3>
+                
+                <!-- 複数動画を綺麗に並べるためのグリッド -->
+                <div class="pv-grid">
+                    <!-- 動画1 -->
+                    <div class="pv-item">
+                        <div class="pv-label">キャラクター紹介PV</div>
+                        <div class="youtube-wrapper">
+                            <!-- <iframe src="..." frameborder="0" allowfullscreen></iframe> -->
+                            <div class="pv-placeholder"><p>※現在PV準備中...</p></div>
+                        </div>
+                    </div>
+
+                    <!-- 動画2（動画が増えたらこのブロックをコピペして増やす） -->
+                    <!--
+                    <div class="pv-item">
+                        <div class="pv-label">シナリオ通過記念動画</div>
+                        <div class="youtube-wrapper">
+                            <div class="pv-placeholder"><p>※準備中...</p></div>
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
+            <!-- ▲▲ PVエリア ここまで ▲▲ -->
+
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="main.js"></script>
+</body>
+</html>

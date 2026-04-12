@@ -1,0 +1,1283 @@
+/* --- 読み込み時のガタつきを防ぐための魔法（改良版） --- */
+
+/* 1. ページ全体を開いた瞬間にふわっと表示させる（画像待ちをしない） */
+body {
+    animation: pageFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes pageFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* 2. ヘッダーが読み込まれるまでの「空箱」を、あらかじめヘッダーっぽくしておく（チカつき防止） */
+#header-placeholder {
+    min-height: 250px;
+    width: 100%;
+    background-color: #fdfaf5;
+    /* 読み込み前から背景画像を出しておく */
+    background-image: url('images/header-bg.webp');
+    background-position: center 60%;
+    background-size: cover;
+}
+
+/* 3. フッターの空箱も黒く塗っておく */
+#footer-placeholder {
+    min-height: 60px;
+    width: 100%;
+    background-color: #333; 
+}
+
+/* 基本リセット */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    line-height: 1.8;       /* 行間を少し広げて、詰め込みすぎないように */
+    letter-spacing: 0.05em; /* 文字と文字の間を少し開けて、圧迫感を消す */
+    color: #2c3e50;         /* 真っ黒(#333)より少しだけ柔らかい色に */
+    background-color: #fcfaf7; /* 真っ白より少し温かみのある色 */
+    font-size: 16px;        /* スマホ・PCともに読みやすい標準サイズ */
+}
+
+/* カードの中身も少し調整 */
+.scenario-card h3 a, 
+.scenario-column h3 {
+    color: #5d6d7e; /* 真っ青ではなく、少しグレーがかった深い青 */
+    text-decoration: none; /* 下線を消す */
+}
+
+.scenario-card h3 a:hover {
+    color: #34495e; /* ホバーした時は少し濃くする */
+    text-decoration: underline;
+}
+
+/* ついでにカード自体の青い要素があればここも統一 */
+.scenario-card h3 {
+    color: #5d6d7e;
+}
+
+#site-header {
+    position: relative;
+    padding: 2rem 1rem;
+    text-align: center;
+    background-image: url('images/header-bg.webp');
+    background-repeat: no-repeat;
+    
+    /* 修正ポイント：background-position で位置を指定 */
+    /* 1つ目の値が左右、2つ目の値が上下（50% 50% で中央） */
+    background-position: center 60%; 
+    
+    background-size: cover;
+    /* fixedを外すとコントロールしやすくなります */
+    background-attachment: scroll; 
+    height: 250px;
+    height: auto;
+    overflow: visible;
+
+    color: #4a4a4a; 
+    background-color: #fdfaf5; 
+    
+    font-size: 16px;
+}
+
+/* ぼかし処理と膜を統合して整理 */
+#site-header::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    /* 背景をぼかして、さらに暗い膜を乗せる */
+    background: inherit;
+    filter: blur(5px) brightness(0.6); 
+    z-index: 0;
+}
+
+/* ヘッダーのぼかし背景（オーバーレイ） */
+#site-header::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: inherit;
+    filter: blur(5px); /* 画像をぼかす */
+    z-index: 0;
+}
+
+/* 文字を前面に出すための工夫 */
+#site-header h1, #site-header #main-nav {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- タイトル：筆記体（Dancing Script） --- */
+#site-header h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3.5rem;
+    color: #ffffff; /* 白色のままか、ほんのり黄色を混ぜるなら #fffef0 もおすすめ */
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2); /* 影を少し薄くすると今風に */
+    margin-bottom: 1.5rem;
+}
+
+/* --- ナビゲーション：リンク設定 --- */
+#main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* --- ナビゲーションボタン：すりガラス風 --- */
+#main-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.6rem 1.5rem;
+    /* 背景を半透明にしてぼかしを入れる */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px; /* 丸みをつけるとおしゃれ */
+    transition: all 0.3s;
+}
+
+#main-nav a:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* メインコンテンツ */
+#main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+#overview-section h2,
+#profile-section h2 {
+    text-align: center;
+    margin: 2rem auto 1.5rem;
+    font-size: 1.5rem;
+    max-width: 640px;
+    line-height: 1.3;
+}
+
+#overview-section p {
+    text-align: center;
+    max-width: 720px;
+    margin: 0.75rem auto;
+    color: #3a4a5a;
+    font-size: 1.05rem;
+    line-height: 1.9;
+}
+
+/* シナリオセクション */
+#scenario-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+/* 検索エリアを親要素として定義し、配置を制御 */
+.search-container {
+    display: flex;
+    justify-content: flex-end; /* PCでは右寄せ */
+    margin-bottom: 2rem;
+}
+
+/* 検索窓 */
+#scenario-search {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* シナリオグリッド */
+.scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    justify-items: center;
+}
+
+.scenario-card {
+    text-align: center;
+    background-color: #fffefb; /* 背景より少しだけ白に近いクリーム色 */
+    border: 1px solid #eee;   /* 薄い枠線を入れるとカードの形が引き締まります */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 影を薄くすると上品になります */
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 300px;
+    transition: transform 0.2s;
+}
+
+.scenario-card:hover {
+    transform: translateY(-5px);
+}
+
+.scenario-card h3 {
+    margin-bottom: 0.5rem;
+    color: #5d6d7e;
+    
+}
+
+.scenario-card p {
+    color: #666;
+}
+
+/* カラム（縦列）レイアウトを解除し、やりたいシナリオと同じ横広がりにする */
+.scenarios-container {
+    display: block; 
+}
+
+.scenario-column {
+    display: block;
+    width: 100%;
+    margin-bottom: 3rem; /* システムごとの縦のスキマ */
+}
+
+.scenario-column h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #5d6d7e;
+}
+
+/* 通過シナリオのh3と、やりたいシナリオのh3（.system-title）の設定を統一 */
+.scenario-column h3,
+.system-title {
+    text-align: center;
+    color: #5d6d7e;      /* 文字色を統一 */
+    margin-bottom: 1rem; /* カードとの距離（下の余白）を統一 */
+}
+
+/* やりたいシナリオのh3の上余白用 */
+.system-title {
+    margin-top: 2rem;
+}
+
+/* やりたいシナリオの「気になる未通過〜」の文字用 */
+.section-desc {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #666; /* 真っ黒より少し薄くすると馴染みます */
+}
+
+/* ネタバレ防止画像クラス */
+.silhouette {
+    filter: brightness(0); /* 真っ黒 */
+}
+
+.blur {
+    filter: blur(10px); /* 強くぼかす */
+}
+
+.thumbnail {
+    width: 100%;
+    max-width: 200px;
+    height: 300px;       /* ★追加：画像の入る「枠の高さ」を全員同じに固定する */
+    object-fit: contain; /* ★追加：縦横比を崩さずに、枠内に全身を綺麗に収める */
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.thumbnail:hover {
+    opacity: 0.8;
+}
+
+/* フッター */
+#site-footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+/* PCではMENUボタンを隠す */
+.menu-btn { 
+    display: none; 
+}
+
+/* レスポンシブデザイン（スマホ版） */
+@media (max-width: 768px) {
+    /* MENUボタンのデザイン */
+    .menu-btn {
+        display: inline-block;
+        color: white;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+        cursor: pointer;
+        z-index: 10;
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    /* メニューリスト（最初は隠す） */
+    .nav-menu {
+        display: none; 
+        width: 100%;
+        background: rgba(0, 0, 0, 0.7); /* 半透明の黒背景 */
+        padding: 1rem 0;
+        border-radius: 8px;
+    }
+
+    /* JSで .is-active が付いたら表示する */
+    .nav-menu.is-active {
+        display: block; 
+    }
+
+    .scenario-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #site-header h1 {
+        font-size: 2rem; /* スマホ用に少し小さく */
+        margin-bottom: 0.5rem;
+    }
+
+    #main-content {
+        padding: 1rem;
+    }
+
+    /* スマホ版のボタン縦並び設定 */
+    #main-nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0;
+    }
+
+    #main-nav li {
+        width: 90%;
+    }
+
+    #main-nav a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 0.8rem;
+    }
+
+    .scenarios-container {
+        flex-direction: column;
+    }
+
+    .search-container {
+        justify-content: center; /* スマホでは中央寄せ */
+    }
+
+    #scenario-search {
+        width: 100%; /* スマホでは横幅いっぱい */
+        max-width: 100%;
+    }
+}
+
+/* --- リンクをカード全体に広げる設定 --- */
+.card-link {
+    display: block;      
+    width: 100%;         
+    height: 100%;        
+    text-decoration: none; 
+    color: inherit;      
+    /* カードのpadding(1.5rem)を打ち消して端までリンクにする */
+    padding: 1.5rem;       
+    margin: -1.5rem;       
+}
+
+/* リンク付きカードにマウスが乗ったときの演出 */
+.scenario-card:has(.card-link):hover {
+    cursor: pointer;
+    background-color: #f5f2ed; /* ほんの少し暗くして押せる感を出す */
+}
+
+/* タイトル文字のホバー時の挙動 */
+.card-link:hover {
+    color: #34495e; /* 少し濃いブルーグレーに */
+    text-decoration: underline;
+}
+
+/* --- プロフィールリンクエリア --- */
+.profile-links {
+    margin-top: 2rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* 動きを一切なくしたボタン */
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.5rem;
+    background-color: #fffefb;
+    color: #5d6d7e;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+
+/* ホバー時の変化も削除 */
+.social-btn:hover {
+    background-color: #fffefb;
+    color: #5d6d7e;
+    border-color: #ddd;
+}
+/* プロフィール用のカードスタイル */
+.profile-card {
+    background-color: #fffefb;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-card h3 {
+    margin-bottom: 1rem;
+    color: #5d6d7e;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.sheet-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+/* スマホの時は縦に並べる */
+@media (max-width: 600px) {
+    .sheet-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .sheet-container img {
+        max-width: 90% !important;
+    }
+}
+
+/* ====== PC詳細ページのデザイン ====== */
+.pc-detail-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fffefb;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.back-link {
+    margin-bottom: 1.5rem;
+}
+
+.back-link a {
+    color: #5d6d7e;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+.pc-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.pc-header h2 {
+    color: #34495e;
+    margin-bottom: 0.5rem;
+}
+
+.scenario-name {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+/* 画像エリア全体 */
+.pc-image-section {
+    margin-bottom: 2rem;
+}
+
+/* メイン画像（大きく中央に） */
+.main-image {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.main-image img {
+    width: 100%;         /* スマホなどで画面が狭い時は幅いっぱいに合わせる */
+    max-width: 400px;    /* PCの広い画面でも、最大400pxまでしか大きくならないように制限！ */
+    height: auto;        /* 縦横比をキープ */
+    
+    /* もし超縦長の画像だった場合、画面からはみ出さないように高さも制限する保険 */
+    max-height: 70vh;    /* 画面の高さの70%まで */
+    object-fit: contain; /* 縦横比を崩さずに綺麗に収める */
+    
+    border-radius: 4px;
+}
+
+/* 差分画像（小さく横に並べる） */
+.sub-images {
+    display: flex;
+    flex-wrap: wrap; /* 画面端にいったら自動で次の行に折り返す */
+    gap: 10px;
+    justify-content: center; /* 中央寄せ */
+    align-items: flex-end;
+}
+
+/* --- 差分画像（サムネイル）のデザイン --- */
+.sub-images img {
+    width: 80px; /* サムネイルは少し小さめがオシャレです */
+    height: auto;
+    border-radius: 4px;
+    border: 2px solid transparent; /* 普段は透明な枠線を置いておく */
+    cursor: pointer;
+    opacity: 0.6; /* 普段は少し薄くしておく */
+    transition: all 0.2s ease;
+}
+
+/* マウスが乗った時 */
+.sub-images img:hover {
+    opacity: 0.9;
+}
+
+/* 選択中（JSで .active が付いた時）のデザイン */
+.sub-images img.active {
+    opacity: 1; /* くっきり表示 */
+    border: 2px solid #5d6d7e; /* 選択中であることを枠線でアピール */
+}
+
+/* --- ボイスエリアのデザイン --- */
+.pc-voice-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #f9f7f4; /* 背景より少しだけ色を付けて区切る */
+    border: 1px solid #e8e3d8;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.voice-label {
+    color: #5d6d7e;
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.voice-quote {
+    font-size: 1rem;
+    color: #34495e;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-family: serif; /* セリフだけ明朝体にすると雰囲気が出ます */
+}
+
+/* 将来プレイヤーを入れる時の枠 */
+.voice-player {
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.voice-coming-soon {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* ====== 1. ボイスエリア（たためるアコーディオン） ====== */
+details.voice-accordion {
+    background-color: #f9f7f4;
+    border: 1px solid #e8e3d8;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+details.voice-accordion summary {
+    font-weight: bold;
+    color: #5d6d7e; 
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding-left: 1.5rem;
+    letter-spacing: 0.1em;
+}
+
+details.voice-accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+/* 閉じている時のアイコン */
+details.voice-accordion summary::before {
+    content: "▶";
+    position: absolute;
+    left: 0;
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+/* 開いている時のアイコン */
+details.voice-accordion[open] summary::before {
+    content: "▼";
+}
+
+.voice-content {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e8e3d8;
+    text-align: center;
+}
+
+.voice-quote {
+    font-size: 1rem;
+    color: #34495e;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-family: serif; /* エモい明朝体 */
+}
+
+.custom-audio {
+    width: 100%;
+    max-width: 300px;
+    height: 40px;
+    outline: none;
+}
+
+.voice-coming-soon {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 10px;
+}
+
+/* ====== 2. 関連動画・PVエリア（複数対応） ====== */
+.pc-pv-section {
+    margin-top: 3rem; /* 上の設定エリアからしっかり離す */
+    padding-top: 2rem;
+    border-top: 2px solid #eee; /* 区切り線 */
+}
+
+.pv-section-title {
+    text-align: center;
+    color: #5d6d7e;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+/* 複数動画用のグリッド */
+.pv-grid {
+    display: grid;
+    /* PCなら横に2列、スマホなら1列になる魔法の設定 */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.pv-item {
+    background-color: #fffefb;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.pv-label {
+    text-align: center;
+    color: #5d6d7e;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+}
+
+/* YouTube用の枠（16:9維持） */
+.youtube-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.youtube-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.pv-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* プロフィールテキスト部分 */
+.pc-text-section h3 {
+    color: #5d6d7e;
+    margin-bottom: 1rem;
+}
+
+/* ====== ページトップへ戻るボタン ====== */
+/* スムーズにスクロールさせる魔法 */
+html {
+    scroll-behavior: smooth;
+}
+
+.page-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(93, 109, 126, 0.8); /* メインカラーを少し透明に */
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 50px; /* 丸っこいボタンに */
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    z-index: 1000; /* 他のものより手前に表示 */
+}
+
+.page-top-btn:hover {
+    background-color: rgba(52, 73, 94, 1);
+    transform: translateY(-3px); /* カーソルを乗せると少し浮く */
+}
+
+/* ====== TRPG用 PC詳細ページ追加デザイン ====== */
+
+/* 魔法の長文入力エリア（HTMLの改行がそのまま反映される） */
+.trpg-text-area {
+    white-space: pre-wrap; /* これが改行をそのまま反映する魔法 */
+    background-color: #fcfaf7;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    color: #4a4a4a;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+/* セクション見出し */
+.trpg-section-title {
+    color: #5d6d7e;
+    border-bottom: 2px solid #5d6d7e;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+/* 基本情報タグ（年齢・性別など） */
+.trpg-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.trpg-tag {
+    background-color: #eef2f5;
+    color: #5d6d7e;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* キャラシリンクボタン */
+.charasheet-btn {
+    display: inline-block;
+    background-color: #5d6d7e;
+    color: white;
+    text-decoration: none;
+    padding: 0.6rem 2rem;
+    border-radius: 30px;
+    font-weight: bold;
+    margin-top: 1rem;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.charasheet-btn:hover {
+    background-color: #34495e;
+    transform: translateY(-2px);
+    color: white; /* リンク色の上書き防止 */
+}
+
+/* 通過シナリオリスト */
+.scenario-history {
+    list-style: none; /* デフォルトの黒丸を消す */
+    padding-left: 0;
+}
+.scenario-history li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #4a4a4a;
+}
+.scenario-history li::before {
+    content: "📖"; /* リストのアイコン */
+    position: absolute;
+    left: 0;
+    font-size: 1rem;
+}
+
+/* ネタバレ折りたたみ機能（アコーディオン） */
+details.spoiler-box {
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem; /* 複数並べた時の隙間 */
+}
+details.spoiler-box summary {
+    font-weight: bold;
+    color: #2c3e50; 
+    cursor: pointer;
+    list-style: none; /* デフォルトの黒い三角を消す */
+    padding: 0.5rem 0.5rem 0.5rem 1.8rem; /* アイコン用の隙間を左に空ける */
+    position: relative;
+    background-color: #eef2f5; /* ボタンっぽく薄い背景 */
+    border-radius: 4px;
+}
+details.spoiler-box summary::-webkit-details-marker {
+    display: none; /* Safari用の三角消し */
+}
+
+/* 閉じている時のアイコン（▶） */
+details.spoiler-box summary::before {
+    content: "▶";
+    position: absolute;
+    left: 0.5rem;
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+/* 開いている時のアイコン（▼） */
+details.spoiler-box[open] summary::before {
+    content: "▼";
+}
+
+/* 折りたたまれた中身 */
+.spoiler-content {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #ccc;
+    white-space: pre-wrap; /* 改行そのまま */
+    color: #333;
+    line-height: 1.8;
+}
+
+/* 画像切り替えの滑らかアニメーション */
+.pc-image-section .main-image img,
+.pc-image-section .main-image img.expandable {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 1;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    display: block;
+}
+
+/* コピペボタンのデザイン */
+.copy-btn {
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    background: #eef2f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.copy-btn:hover {
+    background: #dfe6e9;
+}
+
+/* カテゴリジャンプ用ボタン */
+.category-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 1.5rem 0 2rem;
+    padding: 0.5rem;
+    background-color: #f9f7f4;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.jump-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #fffefb 0%, #f5f2ed 100%);
+    border: 2px solid #e8e3d8;
+    border-radius: 25px;
+    color: #5d6d7e;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.jump-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.jump-btn:hover {
+    background: linear-gradient(135deg, #5d6d7e 0%, #4a5568 100%);
+    border-color: #5d6d7e;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(93, 109, 126, 0.3);
+}
+
+.jump-btn:hover::before {
+    left: 100%;
+}
+
+.jump-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(93, 109, 126, 0.2);
+}
+
+/* 読み込み前のガタつき防止（CSSに追加） */
+#site-header {
+    min-height: 250px; /* 画像の高さに合わせて調整 */
+    display: block;
+}
+
+#site-footer {
+    min-height: 60px;  /* フッターの高さに合わせて調整 */
+}
+
+/* メインコンテンツには少し余裕を持たせる */
+#main-content {
+    min-height: 50vh;
+}
+/* ヘッダーの背景画像を読み込む前に背景色を表示しておく */
+#site-header {
+    background-color: #fdfaf5; /* 読み込み前でも白っぽい色を表示 */
+    background-image: url('images/header-bg.webp');
+}
+
+/* =========================================
+   ギャラリー
+========================================= */
+
+/* 隙間を消す魔法 */
+.gallery-content {
+    white-space: normal !important; 
+    padding-top: 0.5rem;
+    border-top: 1px dashed #e8e3d8; /* アコーディオンの線に合わせる */
+}
+
+/* ギャラリー用のカード */
+.gallery-card {
+    background-color: #fffefb; 
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: left; /* 中央寄せを解除 */
+}
+
+.gallery-card:last-child {
+    margin-bottom: 0;
+}
+
+/* リンクテキスト */
+.gallery-header {
+    margin-bottom: 0.3rem;
+}
+
+.gallery-link {
+    font-weight: bold;
+    color: #5d6d7e; 
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.gallery-link:hover {
+    color: #34495e;
+    text-decoration: underline;
+}
+
+/* ★追加：注意書きの文章用スタイル */
+.gallery-note {
+    font-size: 0.85rem;
+    color: #666; /* 注意喚起っぽく少しだけ赤みを帯びた色に */
+    margin-bottom: 0.5rem;
+}
+
+/* 登場キャラクター欄 */
+.gallery-chars {
+    font-size: 0.85rem;
+    color: #666;
+    background-color: #fcfaf7; 
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+.chars-label {
+    font-weight: bold;
+    color: #5d6d7e;
+    margin-right: 4px;
+}
+
+.gallery-chars a {
+    color: #5d6d7e;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.gallery-chars a:hover {
+    color: #34495e;
+    text-decoration: underline;
+}
+
+.yosonoko {
+    color: #888;
+}
+
+/* クイック・ステータスバーの装飾 */
+.quick-status-board {
+    background: #fdfdfd;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.status-item {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 4px;
+    width: 45%;
+    text-align: center;
+}
+
+.hp-box { background-color: #ffeaea; color: #cc0000; }
+.mp-box { background-color: #eaeeff; color: #0033cc; }
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.grid-item {
+    background: #f5f5f5;
+    padding: 8px 5px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+
+.target-box { background: #eaf8e5; border: 1px solid #d0e8c8; } /* 戦闘関連を少し色分け */
+
+.resource-quick-memo {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #555;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+
+.status-package-row {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f0f4f8; /* 戦闘用とは少し違う背景色にする */
+    border-radius: 6px;
+    padding: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.9em;
+}
+.pkg-item {
+    flex: 1;
+    border-right: 1px solid #ccc;
+}
+.pkg-item:last-child {
+    border-right: none;
+}
+.status-divider {
+    border: none;
+    border-top: 1px dashed #ccc;
+    margin: 10px 0;
+}
+
+/* --- クイックステータス用 注釈メモ --- */
+.status-note {
+    font-size: 0.8rem;
+    color: #555;
+    background-color: #fafafa;
+    padding: 4px 8px;
+    border-left: 3px solid #ccc; /* 左側にちょっとしたアクセント線 */
+    margin-top: -5px; /* 上のブロックに少し近づける */
+    margin-bottom: 10px;
+    line-height: 1.4;
+    text-align: left; /* リソースメモは中央揃えですが、注釈は左揃えが読みやすいです */
+}
+
+/* --- ツール用アコーディオン（折りたたみメニュー） --- */
+details.tool-accordion {
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-top: 10px;
+}
+
+/* クリックする見出し部分 */
+details.tool-accordion summary {
+    font-weight: bold;
+    color: #5d6d7e; 
+    cursor: pointer;
+    list-style: none; /* デフォルトの黒い三角を消す */
+    padding-left: 1.5rem; /* アイコン用の隙間 */
+    position: relative;
+    outline: none; /* クリック時の青い枠線を消す */
+}
+
+/* Safari用の三角消し */
+details.tool-accordion summary::-webkit-details-marker {
+    display: none; 
+}
+
+/* 閉じている時のアイコン（＋） */
+details.tool-accordion summary::before {
+    content: "＋";
+    position: absolute;
+    left: 0;
+    top: -2px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #5d6d7e;
+    transition: transform 0.2s;
+}
+
+/* 開いている時のアイコン（－） */
+details.tool-accordion[open] summary::before {
+    content: "－";
+}
+
+/* 折りたたまれた中身（チェックボックスが入るエリア） */
+.tool-accordion-content {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #ccc;
+}
+
+/* チェックボックスの並びを綺麗にする */
+.tool-accordion-content label {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    color: #4a4a4a;
+    cursor: pointer;
+}
+
+/* 未実装（disabled）の項目を少し薄くする */
+.tool-accordion-content label:has(input:disabled) {
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* --- 種族情報のタブデザイン --- */
+.race-tabs {
+    display: flex;
+    gap: 5px;
+    border-bottom: 2px solid #5d6d7e; /* 下線を引いてタブっぽく */
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* スマホで画面が狭い時は折り返す */
+}
+
+.race-tab-btn {
+    background-color: #f0f4f8;
+    color: #5d6d7e;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+/* 選択されていないタブにマウスを乗せた時 */
+.race-tab-btn:hover:not(.active) {
+    background-color: #e2e8f0;
+}
+
+/* 選択されている（アクティブな）タブ */
+.race-tab-btn.active {
+    background-color: #5d6d7e;
+    color: white;
+    border-color: #5d6d7e;
+}
+
+/* タブの中身のベース設定 */
+.race-tab-content {
+    display: none; /* 基本は隠しておく */
+    padding: 15px;
+    background-color: #fcfaf7;
+    border: 1px solid #eee;
+    border-radius: 0 0 8px 8px;
+    color: #4a4a4a;
+    line-height: 1.6;
+    animation: fadeInTab 0.3s ease; /* ふわっと表示される魔法 */
+}
+
+/* アクティブな中身だけ表示する */
+.race-tab-content.active {
+    display: block;
+}
+
+@keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
