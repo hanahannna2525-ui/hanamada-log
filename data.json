@@ -28,7 +28,7 @@
   { "id": 27, "title": "アリスインロストワンダーランド", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/3324216" },
   { "id": 28, "title": "昔ちょっとやってたけどルルブなくしました", "category": "CoC", "status": "planned", "url": "" },
   { "id": 30, "title": "キャラも作ったことない初心者です", "category": "エモクロア", "status": "planned", "url": "" },
-  { "id": 31, "title": "キャラも作ったことない初心者です", "category": "SW", "status": "planned", "url": "" },
+  { "id": 31, "title": "初心者なので色々教えて欲しいです", "category": "SW", "status": "planned", "url": "" },
   { "id": 32, "title": "世界の終わりとアイリの図書館", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/7032407" },
   { "id": 33, "title": "エイダ", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/4124519" },
   { "id": 34, "title": "ゴーストライターの誕生、又はその末路", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/2628822" },
@@ -63,5 +63,11 @@
   { "id": 63, "title": "悪役令嬢は愛に溺れて", "category": "マダミス", "status": "planned", "url": "https://racsradiuyu.booth.pm/items/6865257" },
   { "id": 64, "title": "HIDE and SEEK", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/7553641" },
   { "id": 65, "title": "可愛いアリスの暗号解析", "category": "マダミス", "status": "planned", "url": "https://onigasima.booth.pm/items/8098624" },
-  { "id": 66, "title": "この（クズの）中に一人、勇者がいる！", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/6840550" }
+  { "id": 66, "title": "この（クズの）中に一人、勇者がいる！", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/6840550" },
+  { "id": 67, "title": "純血種は語れない", "category": "マダミス", "status": "planned", "url": "https://decadent-theater.booth.pm/items/5466145" },
+  { "id": 68, "title": "狼に憧れた", "category": "マダミス", "status": "planned", "url": "https://etostudio.booth.pm/items/7871902" },
+  { "id": 69, "title": "黒蝶館殺人事件", "category": "マダミス", "status": "planned", "url": "https://group-mma.booth.pm/items/7376274" },
+  { "id": 70, "title": "ホストクラブ殺人事件 -last proof of love-", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/2699373" },
+  { "id": 71, "title": "善良村の殺人", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/4720542" },
+  { "id": 72, "title": "初心者なので色々教えて欲しいです", "category": "SW", "status": "cleared", "url": "" }
 ]
