@@ -72,5 +72,10 @@
   { "id": 72, "title": "蛮族を駆逐せよ", "category": "SW", "status": "cleared", "url": "" },
   { "id": 73, "title": "ALL GREEN", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/5573350" },
   { "id": 74, "title": "アタシの高級鯖缶たべたの誰にゃ!!?", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/8013265" },
-  { "id": 75, "title": "ゆっくりと苦しみをもって", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/4204650" }
+  { "id": 75, "title": "ゆっくりと苦しみをもって", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/4204650" },
+  { "id": 76, "title": "蜻蛉がえり", "category": "CoC", "status": "cleared", "url": "https://booth.pm/ja/items/2485941" },
+  { "id": 77, "title": "その鉄のガラクタいわく", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/8160351" },
+  { "id": 78, "title": "魔法少女は死んでいる", "category": "マダミス", "status": "planned", "url": "https://bluesonia.booth.pm/items/4481888" },
+  { "id": 79, "title": "ほしのおと", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/5056376" },
+  { "id": 80, "title": "魔法仕掛けの少女たち -Deus ex Magia-", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/6983731" }
 ]
