@@ -77,5 +77,8 @@
   { "id": 77, "title": "その鉄のガラクタいわく", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/8160351" },
   { "id": 78, "title": "魔法少女は死んでいる", "category": "マダミス", "status": "planned", "url": "https://bluesonia.booth.pm/items/4481888" },
   { "id": 79, "title": "ほしのおと", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/5056376" },
-  { "id": 80, "title": "魔法仕掛けの少女たち -Deus ex Magia-", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/6983731" }
+  { "id": 80, "title": "魔法仕掛けの少女たち -Deus ex Magia-", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/6983731" },
+  { "id": 81, "title": "アクオトギ", "category": "マダミス", "status": "planned", "url": "https://tsukimide1pai.booth.pm/items/4670357" },
+  { "id": 82, "title": "少女の気持ち", "category": "SW", "status": "cleared", "url": "" },
+  { "id": 83, "title": "ルミエール急行にて", "category": "SW", "status": "cleared", "url": "https://talto.cc/projects/Xa9xwm9to969oGzAApAVm" }
 ]
