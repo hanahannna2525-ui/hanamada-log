@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const abilities =['A', 'B', 'C', 'D', 'E', 'F'];
 
         let resultsHtml = `<p><strong>${selectedRace.name}</strong> の能力値ダイス結果です。</p>`;
+        resultsHtml += `<p style="font-size: 0.85em; color: #666; margin-top: -10px;">※ A(器用) / B(敏捷) / C(筋力) / D(生命) / E(知力) / F(精神)</p>`;
         resultsHtml += `<div style="display: flex; gap: 15px; flex-wrap: wrap;">`;
         
         let generatedPatterns =[];
@@ -215,8 +216,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const mark = getEvalMark(result.sum, result.expected);
                 const displayStr = `[${result.rolls.join(' + ')}]${result.modStr}`;
-                // ↓ ${key} を ${ABILITY_LABELS[key]} に変更
-                listHtml += `<li><strong>${ABILITY_LABELS[key]}</strong> (${diceStr}) : ${displayStr} = <strong>${result.sum}</strong> ${mark}</li>`;
+                
+                // ↓ ${ABILITY_LABELS[key]} にした部分を元の ${key} に戻す
+                listHtml += `<li><strong>${key}</strong> (${diceStr}) : ${displayStr} = <strong>${result.sum}</strong> ${mark}</li>`;
             });
             listHtml += `</ul>`;
 
