@@ -175,6 +175,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return advice;
     }
 
+    // ▼ 能力値の表示用ラベル（これを追加！） ▼
+    const ABILITY_LABELS = {
+        'A': 'A (器用度)',
+        'B': 'B (敏捷度)',
+        'C': 'C (筋力)',
+        'D': 'D (生命力)',
+        'E': 'E (知力)',
+        'F': 'F (精神力)'
+    };
+
     // ▼ ダイスを振る処理 ▼
     rollBtn.addEventListener('click', function() {
         const selectedRace = RACES[raceSelect.value];
@@ -205,7 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const mark = getEvalMark(result.sum, result.expected);
                 const displayStr = `[${result.rolls.join(' + ')}]${result.modStr}`;
-                listHtml += `<li><strong>${key}</strong> (${diceStr}) : ${displayStr} = <strong>${result.sum}</strong> ${mark}</li>`;
+                // ↓ ${key} を ${ABILITY_LABELS[key]} に変更
+                listHtml += `<li><strong>${ABILITY_LABELS[key]}</strong> (${diceStr}) : ${displayStr} = <strong>${result.sum}</strong> ${mark}</li>`;
             });
             listHtml += `</ul>`;
 
@@ -232,7 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 let html = "";
                 abilities.forEach(key => {
-                    html += `<span style="margin-right: 15px;">${key}: <span style="color:#d32f2f;">${keptDiceData[key]}</span></span>`;
+                    // ↓ ${key} を ${ABILITY_LABELS[key]} に変更
+                    html += `<span style="margin-right: 15px;">${ABILITY_LABELS[key]}: <span style="color:#d32f2f;">${keptDiceData[key]}</span></span>`;
                 });
                 
                 selectedDiceDisplay.innerHTML = html;
