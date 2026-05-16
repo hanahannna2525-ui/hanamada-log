@@ -26,7 +26,7 @@
   { "id": 25, "title": "夜の蛙は眠らない", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/3528073" },
   { "id": 26, "title": "NOBODY", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/5457771" },
   { "id": 27, "title": "アリスインロストワンダーランド", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/3324216" },
-  { "id": 28, "title": "昔ちょっとやってたけどルルブなくしました", "category": "CoC", "status": "planned", "url": "" },
+  { "id": 28, "title": "昔6版ちょっとやってたけどほぼ忘れました", "category": "CoC", "status": "planned", "url": "" },
   { "id": 30, "title": "キャラも作ったことない初心者です", "category": "エモクロア", "status": "planned", "url": "" },
   { "id": 31, "title": "初心者なので色々教えて欲しいです", "category": "SW", "status": "planned", "url": "" },
   { "id": 32, "title": "世界の終わりとアイリの図書館", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/7032407" },
@@ -39,7 +39,7 @@
   { "id": 39, "title": "あくまのつくりかた", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/4586333" },
   { "id": 40, "title": "ようこそ、深海遊園地へ", "category": "マダミス", "status": "planned", "url": "https://usonodagashiya.booth.pm/items/6639298" },
   { "id": 41, "title": "くっころ", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/8003483" },
-  { "id": 42, "title": "ブルークロスの純愛", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/3253783" },
+  { "id": 42, "title": "ブルークロスの純愛", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/3253783" },
   { "id": 43, "title": "狂騒の仮面舞踏会", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/5240926" },
   { "id": 44, "title": "かの遺志は極夜に揺れる", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/6544883" },
   { "id": 45, "title": "サイレンズ", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/8132541" },
@@ -48,7 +48,7 @@
   { "id": 48, "title": "流星のモビーディック", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/6770056" },
   { "id": 49, "title": "憑母病棟監獄実験", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/6857083" },
   { "id": 50, "title": "馬鹿だね、魔法少女みたいな顔して", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/3928608" },
-  { "id": 51, "title": "悪の組織は(ま)とまらない！", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/5936168" },
+  { "id": 51, "title": "悪の組織は(ま)とまらない！", "category": "UZU", "status": "cleared", "url": "https://booth.pm/ja/items/5936168" },
   { "id": 52, "title": "勇者失格", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/7663259" },
   { "id": 53, "title": "王子の婚約者として真面目に生きてきたはずなのに、殺人の濡れ衣を着せられています！？", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/2102454" },
   { "id": 54, "title": "あの日のあなたと祝杯を", "category": "マダミス", "status": "planned", "url": "https://kamihoshi.booth.pm/items/3534442" },
@@ -84,7 +84,5 @@
   { "id": 84, "title": "レッドストランドの崩壊", "category": "マダミス", "status": "cleared", "url": "https://ccfolia.com/games/8S3BrKiZ7pfuUJ3UEfWx" },
   { "id": 85, "title": "深海に沈む嘘", "category": "UZU", "status": "cleared", "url": "" },
   { "id": 86, "title": "二重密室の虚実", "category": "UZU", "status": "cleared", "url": "" },
-  { "id": 87, "title": "厄災の年代記　第一話「時を閉じる回廊」", "category": "SW", "status": "cleared", "url": "" },
-  { "id": 88, "title": "ブルークロスの純愛", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/3253783" },
-  { "id": 89, "title": "悪の組織は(ま)とまらない！", "category": "UZU", "status": "cleared", "url": "https://booth.pm/ja/items/5936168" }
+  { "id": 87, "title": "厄災の年代記　第一話「時を閉じる回廊」", "category": "SW", "status": "cleared", "url": "" }
 ]
