@@ -87,5 +87,7 @@
   { "id": 87, "title": "厄災の年代記　第一話「時を閉じる回廊」", "category": "SW", "status": "cleared", "url": "" },
   { "id": 88, "title": "光る星は嘘をつく", "category": "UZU", "status": "cleared", "url": "" },
   { "id": 89, "title": "光る星は嘘をつく Parallel", "category": "UZU", "status": "cleared", "url": "" },
-  { "id": 90, "title": "氷の徒花", "category": "SW", "status": "cleared", "url": "https://booth.pm/ja/items/5475218" }
+  { "id": 90, "title": "氷の徒花", "category": "SW", "status": "cleared", "url": "https://booth.pm/ja/items/5475218" },
+  { "id": 91, "title": "ヒガンノ饗宴", "category": "UZU", "status": "planned", "url": "" },
+  { "id": 92, "title": "南極地点X", "category": "マダミス", "status": "planned", "url": "https://booth.pm/ja/items/2283809" }
 ]
