@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'F': 'F (精神力)'
     };
 
-    // ▼▼追加：ストックを描画する関数▼▼
+    // ▼▼ストックを描画する関数▼▼
     function renderStock() {
         if (!stockDiceSection || !stockDiceContainer) return;
         if (stockDiceList.length === 0) {
@@ -217,32 +217,84 @@ document.addEventListener('DOMContentLoaded', function() {
             const btnText = isSelected ? "⭐ 選択中" : "✅ 決定";
             const btnOpacity = isSelected ? "1" : "0.6";
 
+            let diceValuesHtml = '';
+            const abilities = ['A', 'B', 'C', 'D', 'E', 'F'];
+            abilities.forEach((key, idx) => {
+                const baseVal = stock.dice[key];
+                let displayVal = baseVal;
+                let modStr = '';
+                
+                if (stock.activeMod) {
+                    const modVal = stock.mods[stock.activeMod][key] || 0;
+                    if (modVal !== 0) {
+                        displayVal = baseVal + modVal;
+                        modStr = modVal > 0 ? `<span style="color:#e91e63; font-size:0.85em;">(+${modVal})</span>` : `<span style="color:#2196f3; font-size:0.85em;">(${modVal})</span>`;
+                    }
+                }
+                
+                diceValuesHtml += `<strong>${key}</strong>:${displayVal}${modStr}${stock.marks[key]}`;
+                if (idx === 2) {
+                    diceValuesHtml += ' <br> ';
+                } else if (idx !== 5) {
+                    diceValuesHtml += ' / ';
+                }
+            });
+
+            let modPanelHtml = '';
+            if (stock.showModPanel) {
+                const activeMod = stock.activeMod;
+                modPanelHtml = `
+                <div class="mod-panel" style="margin-top: 10px; padding: 10px; border: 1px dashed #ff9800; border-radius: 6px; background: #fffdf9;">
+                    <div style="display: flex; gap: 5px; margin-bottom: 8px;">
+                        <button class="mod-tab-btn" data-index="${index}" data-mod="1" style="flex:1; padding:4px; font-size:0.8em; font-weight:bold; background: ${activeMod === '1' ? '#ff9800' : '#ddd'}; color: ${activeMod === '1' ? '#fff' : '#333'}; border:none; border-radius:3px; cursor:pointer;">補正1</button>
+                        <button class="mod-tab-btn" data-index="${index}" data-mod="2" style="flex:1; padding:4px; font-size:0.8em; font-weight:bold; background: ${activeMod === '2' ? '#ff9800' : '#ddd'}; color: ${activeMod === '2' ? '#fff' : '#333'}; border:none; border-radius:3px; cursor:pointer;">補正2</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; font-size: 0.8em;">
+                `;
+                
+                abilities.forEach(key => {
+                    const currentModSet = activeMod ? stock.mods[activeMod] : { A:0, B:0, C:0, D:0, E:0, F:0 };
+                    const val = currentModSet[key] || 0;
+                    
+                    modPanelHtml += `
+                        <div style="display:flex; align-items:center; gap:2px;">
+                            <span style="font-weight:bold;">${key}:</span>
+                            <input type="number" class="mod-input" data-index="${index}" data-key="${key}" value="${val}" style="width:100%; min-width:30px; padding:2px; font-size:0.9em; text-align:center; border: 1px solid #ccc; border-radius:3px;" ${!activeMod ? 'disabled' : ''}>
+                        </div>
+                    `;
+                });
+                
+                modPanelHtml += `
+                    </div>
+                </div>
+                `;
+            }
+
             html += `
             <div class="dice-pattern-card" style="border: 2px solid #4caf50; padding: 10px; border-radius: 8px; flex: 1; min-width: 220px; background: #fff;">
                 <h4 style="margin-top: 0; margin-bottom: 5px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">${stock.raceName}</h4>
                 <div style="font-size: 0.85em; margin-bottom: 10px;">${stock.rankHtml}</div>
                 <div style="font-size: 0.95em; margin-bottom: 10px; background: #f9f9f9; padding: 5px; border-radius: 4px; line-height: 1.6;">
-                    A:${stock.dice['A']}${stock.marks['A']} / B:${stock.dice['B']}${stock.marks['B']} / C:${stock.dice['C']}${stock.marks['C']} <br>
-                    D:${stock.dice['D']}${stock.marks['D']} / E:${stock.dice['E']}${stock.marks['E']} / F:${stock.dice['F']}${stock.marks['F']}
+                    ${diceValuesHtml}
                 </div>
                 <div style="display:flex; gap:5px;">
                     <button class="social-btn decide-stock-btn" data-index="${index}" style="flex:1; padding: 5px; font-size:0.9em; background: #2196f3; opacity: ${btnOpacity};">${btnText}</button>
+                    <button class="social-btn mod-toggle-btn" data-index="${index}" style="padding: 5px; background: #ff9800; font-size:0.9em; border:none; border-radius:3px; color:white; cursor:pointer;" title="能力補正を設定">🔧</button>
                     <button class="social-btn delete-stock-btn" data-index="${index}" style="padding: 5px; background: #e91e63; font-size:0.9em;">🗑️</button>
                 </div>
+                ${modPanelHtml}
             </div>`;
         });
         stockDiceContainer.innerHTML = html;
 
-        // 「✅ 決定」ボタンが押された時
         document.querySelectorAll('.decide-stock-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const idx = this.getAttribute('data-index');
                 decideDice(stockDiceList[idx]);
-                renderStock(); // ★見た目を更新するために再描画
+                renderStock();
             });
         });
 
-        // 「🗑️ 削除」ボタンが押された時
         document.querySelectorAll('.delete-stock-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const idx = this.getAttribute('data-index');
@@ -256,7 +308,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 renderStock();
 
-                // 画面に元のボタンが残っていれば「ストックする」に戻す
                 const originBtn = document.querySelector(`.stock-pattern-btn[data-id="${deletedId}"]`);
                 if (originBtn) {
                     originBtn.innerHTML = "📌 ストックする";
@@ -265,26 +316,106 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+
+        document.querySelectorAll('.mod-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.getAttribute('data-index'), 10);
+                const stock = stockDiceList[idx];
+                
+                stock.showModPanel = !stock.showModPanel;
+                
+                if (!stock.showModPanel) {
+                    stock.activeMod = null;
+                } else {
+                    stock.activeMod = stock.lastActiveMod || '1';
+                }
+                
+                if (keptDiceId === stock.id) {
+                    decideDice(stock);
+                }
+                
+                renderStock();
+            });
+        });
+
+        document.querySelectorAll('.mod-tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.getAttribute('data-index'), 10);
+                const modType = this.getAttribute('data-mod');
+                const stock = stockDiceList[idx];
+                
+                stock.activeMod = modType;
+                stock.lastActiveMod = modType;
+                
+                if (keptDiceId === stock.id) {
+                    decideDice(stock);
+                }
+                renderStock();
+            });
+        });
+
+        document.querySelectorAll('.mod-input').forEach(input => {
+            input.addEventListener('input', function() {
+                const idx = parseInt(this.getAttribute('data-index'), 10);
+                const key = this.getAttribute('data-key');
+                const val = parseInt(this.value, 10) || 0;
+                const stock = stockDiceList[idx];
+                
+                if (stock.activeMod) {
+                    stock.mods[stock.activeMod][key] = val;
+                }
+                
+                if (keptDiceId === stock.id) {
+                    decideDice(stock);
+                }
+            });
+
+            input.addEventListener('change', function() {
+                renderStock();
+            });
+        });
     }
 
-    // ▼▼追加：ストックから最終決定する関数▼▼
     function decideDice(stockItem) {
-        keptDiceData = stockItem.dice;
-        keptDiceId = stockItem.id; // ★これを追加！
+        const adjustedDice = { ...stockItem.dice };
+        if (stockItem.activeMod) {
+            const modSet = stockItem.mods[stockItem.activeMod];
+            for (const key of ['A', 'B', 'C', 'D', 'E', 'F']) {
+                adjustedDice[key] = stockItem.dice[key] + (modSet[key] || 0);
+            }
+        }
+
+        keptDiceData = adjustedDice;
+        keptDiceId = stockItem.id;
         
         let html = `<div style="width:100%; margin-bottom: 5px;"><strong>【${stockItem.raceName}】</strong></div>`;
         const abilities =['A', 'B', 'C', 'D', 'E', 'F'];
         abilities.forEach(key => {
-            html += `<span style="margin-right: 15px;">${ABILITY_LABELS[key] || key}: <span style="color:#d32f2f;">${keptDiceData[key]}</span> ${stockItem.marks[key]}</span>`;
+            const baseVal = stockItem.dice[key];
+            const val = adjustedDice[key];
+            const diff = val - baseVal;
+            let modText = '';
+            
+            if (diff !== 0) {
+                modText = diff > 0 ? `<span style="color:#e91e63; font-size:0.85em;">(+${diff})</span>` : `<span style="color:#2196f3; font-size:0.85em;">(${diff})</span>`;
+            }
+            
+            html += `<span style="margin-right: 15px;">${ABILITY_LABELS[key] || key}: <span style="color:#d32f2f;">${val}</span>${modText} ${stockItem.marks[key]}</span>`;
         });
         
         selectedDiceDisplay.innerHTML = html;
         selectedDiceSection.style.display = 'block';
         document.getElementById('job-diagnosis-section').style.display = 'block';
         document.getElementById('final-status-display').innerHTML = '';
-        document.getElementById('job-advice-display').style.display = 'none';
+        
+        const jobAdvice = document.getElementById('job-advice-display');
+        if (jobAdvice && jobAdvice.style.display === 'block') {
+            if (calcJobBtn) {
+                calcJobBtn.dispatchEvent(new Event('click'));
+            }
+        }
 
-        const advice = getAdvice(keptDiceData, stockItem.raceName);
+        const advice = getAdvice(adjustedDice, stockItem.raceName);
         if (adviceDisplay) adviceDisplay.innerHTML = advice;
     }
     // ▲▲追加ここまで▲▲
@@ -304,14 +435,14 @@ document.addEventListener('DOMContentLoaded', function() {
         let generatedPatterns =[];
         let generatedRanks = []; 
         let generatedIds = []; 
-        let generatedMarks = []; // ★追加：マーク保存用の配列
+        let generatedMarks = []; 
 
         for (let i = 1; i <= 3; i++) {
-            const uniqueId = 'pattern_' + Date.now() + '_' + i; // ★追加：被らない目印を作る
+            const uniqueId = 'pattern_' + Date.now() + '_' + i;
             generatedIds.push(uniqueId);
 
             let patternResult = {};
-            let patternMarks = {}; // ★追加：このパターンのマーク
+            let patternMarks = {};
             let totalVal = 0;
             let totalExpected = 0;
             
@@ -326,19 +457,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 totalExpected += result.expected;
                 
                 const mark = getEvalMark(result.sum, result.expected);
-                patternMarks[key] = mark; // ★これを追加！
+                patternMarks[key] = mark;
 
                 const displayStr = `[${result.rolls.join(' + ')}]${result.modStr}`;
                 
-                // ↓ ${ABILITY_LABELS[key]} にした部分を元の ${key} に戻す
                 listHtml += `<li><strong>${key}</strong> (${diceStr}) : ${displayStr} = <strong>${result.sum}</strong> ${mark}</li>`;
             });
             listHtml += `</ul>`;
 
             generatedPatterns.push(patternResult); 
-            generatedMarks.push(patternMarks); // ★これを追加！
+            generatedMarks.push(patternMarks);
             const rankHtml = getRank(totalVal, totalExpected);
-            generatedRanks.push(rankHtml); // ★追加
+            generatedRanks.push(rankHtml);
 
             resultsHtml += `
             <div class="dice-pattern-card" style="border: 2px solid #ddd; padding: 10px; border-radius: 8px; flex: 1; min-width: 220px; background: #fff;">
@@ -351,7 +481,6 @@ document.addEventListener('DOMContentLoaded', function() {
         resultsHtml += `</div>`;
         diceResults.innerHTML = resultsHtml;
 
-        // ▼ 「ストックする」ボタンが押された時の処理 ▼
         const stockBtns = document.querySelectorAll('.stock-pattern-btn');
         stockBtns.forEach(btn => {
             const btnId = btn.getAttribute('data-id');
@@ -364,19 +493,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
             btn.addEventListener('click', function() {
                 const pIndex = this.getAttribute('data-index');
-                const pId = this.getAttribute('data-id'); // ★IDを取得
+                const pId = this.getAttribute('data-id');
                 
-                // ★ すでにストックリストにあるか探す
                 const existingIndex = stockDiceList.findIndex(item => item.id === pId);
                 
                 if (existingIndex >= 0) {
-                    // 【リストにある場合】＝ ストック解除処理
-                    const removedItem = stockDiceList.splice(existingIndex, 1)[0];
+                    stockDiceList.splice(existingIndex, 1)[0];
                     this.innerHTML = "📌 ストックする";
                     this.style.opacity = "1";
                     this.style.background = "#4caf50";
 
-                    // ★解除したものが「現在決定中」のものだったら下部を閉じる
                     if (keptDiceId === pId) {
                         clearDecision();
                     }
@@ -387,18 +513,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         raceName: selectedRace.name,
                         dice: generatedPatterns[pIndex],
                         marks: generatedMarks[pIndex],
-                        rankHtml: generatedRanks[pIndex]
+                        rankHtml: generatedRanks[pIndex],
+                        showModPanel: false,
+                        activeMod: null,
+                        lastActiveMod: '1',
+                        mods: {
+                            '1': { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0 },
+                            '2': { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0 }
+                        }
                     };
                     stockDiceList.push(newItem);
                     this.innerHTML = "❌ ストック解除";
                     this.style.opacity = "0.8";
                     this.style.background = "#9e9e9e";
 
-                    // ★★★ここがポイント：ストック追加と同時に「決定」もする！★★★
                     decideDice(newItem);
                 }
                 
-                renderStock(); // ストック画面を更新
+                renderStock();
             });
         });
     });
