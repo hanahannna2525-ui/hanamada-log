@@ -1270,6 +1270,7 @@ details.tool-accordion[open] summary::before {
     color: #4a4a4a;
     line-height: 1.6;
     animation: fadeInTab 0.3s ease; /* ふわっと表示される魔法 */
+    white-space: pre-wrap; 
 }
 
 /* アクティブな中身だけ表示する */
@@ -1281,3 +1282,4 @@ details.tool-accordion[open] summary::before {
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
