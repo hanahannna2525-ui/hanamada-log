@@ -96,5 +96,7 @@
   { "id": 96, "title": "ミリアムの地下迷宮", "category": "SW", "status": "cleared", "url": "https://booth.pm/ja/items/6381481" },
   { "id": 97, "title": "血濡れの紫陽花", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/2115623" },
   { "id": 98, "title": "終点。", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/3572184" },
-  { "id": 99, "title": "不思議の国のアビス", "category": "SW", "status": "cleared", "url": "" }
+  { "id": 99, "title": "不思議の国のアビス", "category": "SW", "status": "cleared", "url": "" },
+  { "id": 100, "title": "世界の終わりとアイリの図書館", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/7032407" },
+  { "id": 101, "title": "○○だって恋をしたい！", "category": "SW", "status": "cleared", "url": "" }
 ]
