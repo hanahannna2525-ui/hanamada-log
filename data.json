@@ -98,5 +98,7 @@
   { "id": 98, "title": "終点。", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/3572184" },
   { "id": 99, "title": "不思議の国のアビス", "category": "SW", "status": "cleared", "url": "" },
   { "id": 100, "title": "世界の終わりとアイリの図書館", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/7032407" },
-  { "id": 101, "title": "○○だって恋をしたい！", "category": "SW", "status": "cleared", "url": "" }
+  { "id": 101, "title": "○○だって恋をしたい！", "category": "SW", "status": "cleared", "url": "" },
+  { "id": 102, "title": "廻煌館殺人事件", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/7633325" },
+  { "id": 103, "title": "エンドロールは流れない", "category": "マダミス", "status": "cleared", "url": "https://booth.pm/ja/items/4478359" }
 ]
