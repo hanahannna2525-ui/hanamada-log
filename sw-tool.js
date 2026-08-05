@@ -15,12 +15,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const adviceDisplay = document.getElementById('advice-display');
 
     let keptDiceData = null;
-    let keptDiceId = null; // ★追加：現在決定しているダイスのID
+    let keptDiceId = null; // 現在決定しているダイスのID
     let stockDiceList = []; 
     const stockDiceSection = document.getElementById('stock-dice-section'); 
     const stockDiceContainer = document.getElementById('stock-dice-container'); 
 
-    // ▼▼追加：決定状態をリセットして下部を閉じる関数▼▼
+    // 決定状態をリセットして下部を閉じる関数
     function clearDecision() {
         keptDiceData = null;
         keptDiceId = null;
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // イベント登録
     checkboxes.forEach(cb => cb.addEventListener('change', updateRaceOptions));
 
-    // ▼ 種族ガチャ ▼
+    // 種族ガチャ
     randomRaceBtn.addEventListener('click', function() {
         const options = Array.from(raceSelect.options).filter(opt => opt.value !== "");
         if (options.length === 0) return;
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
         raceSelect.dispatchEvent(new Event('change')); 
     });
 
-    // ▼ 種族が選ばれたらデータを流し込む ▼
+    // 種族が選ばれたらデータを流し込む
     raceSelect.addEventListener('change', function() {
         const selectedId = raceSelect.value;
         if (selectedId && RACES[selectedId]) {
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ▼ タブ切り替えの処理 ▼
+    // タブ切り替えの処理
     tabBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             tabBtns.forEach(b => b.classList.remove('active'));
@@ -115,10 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ▼ ダイス計算ロジック ▼
+    // ダイス計算ロジック (最大値・最小値の判定を追加)
     function rollDice(diceStr) {
         const match = diceStr.match(/^(\d+)d6(?:([+-])(\d+))?$/);
-        if (!match) return { rolls:[], sum: 0, modStr: "", expected: 0 };
+        if (!match) return { rolls:[], sum: 0, modStr: "", expected: 0, isMax: false, isMin: false };
 
         const count = parseInt(match[1], 10);
         const sign = match[2];
@@ -142,7 +142,11 @@ document.addEventListener('DOMContentLoaded', function() {
             totalSum -= mod; expected -= mod; modStr = ` - ${mod}`;
         }
 
-        return { rolls: rolls, sum: totalSum, modStr: modStr, expected: expected };
+        // ダイス目（固定値除く）の最小値・最大値判定
+        const isMin = (diceSum === count * 1);
+        const isMax = (diceSum === count * 6);
+
+        return { rolls: rolls, sum: totalSum, modStr: modStr, expected: expected, isMax: isMax, isMin: isMin };
     }
 
     function getEvalMark(val, expected) {
@@ -192,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return advice;
     }
 
-    // ▼ 能力値の表示用ラベル（これを追加！） ▼
+    // 能力値の表示用ラベル
     const ABILITY_LABELS = {
         'A': 'A (器用度)',
         'B': 'B (敏捷度)',
@@ -202,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'F': 'F (精神力)'
     };
 
-    // ▼▼ストックを描画する関数▼▼
+    // ストックを描画する関数
     function renderStock() {
         if (!stockDiceSection || !stockDiceContainer) return;
         if (stockDiceList.length === 0) {
@@ -418,9 +422,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const advice = getAdvice(adjustedDice, stockItem.raceName);
         if (adviceDisplay) adviceDisplay.innerHTML = advice;
     }
-    // ▲▲追加ここまで▲▲
 
-    // ▼ ダイスを振る処理 ▼
+    // ダイスを振る処理 (出目の最大最小時に色の変化を追加)
     rollBtn.addEventListener('click', function() {
         const selectedRace = RACES[raceSelect.value];
         if (!selectedRace) return;
@@ -461,7 +464,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const displayStr = `[${result.rolls.join(' + ')}]${result.modStr}`;
                 
-                listHtml += `<li><strong>${key}</strong> (${diceStr}) : ${displayStr} = <strong>${result.sum}</strong> ${mark}</li>`;
+                // ダイスの最大最小結果に応じて数値の色（Style）を分岐
+                let sumStyle = "strong";
+                if (result.isMax) {
+                    sumStyle = "strong style='color: #e91e63; font-weight: bold; text-shadow: 0 0 1px #ffc107;'";
+                } else if (result.isMin) {
+                    sumStyle = "strong style='color: #2196f3; font-weight: bold; text-shadow: 0 0 1px #b3e5fc;'";
+                }
+
+                listHtml += `<li><strong>${key}</strong> (${diceStr}) : ${displayStr} = <${sumStyle}>${result.sum}</${sumStyle.split(' ')[0]}> ${mark}</li>`;
             });
             listHtml += `</ul>`;
 
@@ -534,8 +545,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-// ==========================================
-    // ▼ 職業体験・適性診断ロジック
+
+    // ==========================================
+    // ▼ 職業体験・適性診断ロジック (ボーナス表示・最大最小判定追加)
     // ==========================================
     const calcJobBtn = document.getElementById('calc-job-btn');
     const baseTecInput = document.getElementById('base-tec');
@@ -545,66 +557,143 @@ document.addEventListener('DOMContentLoaded', function() {
     const jobAdviceDisplay = document.getElementById('job-advice-display');
 
     if (calcJobBtn) {
-    calcJobBtn.addEventListener('click', function() {
-        if (!keptDiceData) { alert('先に能力値ダイスを決定してください！'); return; }
+        calcJobBtn.addEventListener('click', function() {
+            if (!keptDiceData) { alert('先に能力値ダイスを決定してください！'); return; }
 
-        const tec = parseInt(baseTecInput.value, 10) || 0;
-        const phy = parseInt(basePhyInput.value, 10) || 0;
-        const spi = parseInt(baseSpiInput.value, 10) || 0;
+            const tec = parseInt(baseTecInput.value, 10) || 0;
+            const phy = parseInt(basePhyInput.value, 10) || 0;
+            const spi = parseInt(baseSpiInput.value, 10) || 0;
 
-        const stats = {
-            '器用度': tec + keptDiceData['A'], '敏捷度': tec + keptDiceData['B'],
-            '筋力': phy + keptDiceData['C'], '生命力': phy + keptDiceData['D'],
-            '知力': spi + keptDiceData['E'], '精神力': spi + keptDiceData['F']
-        };
+            const stats = {
+                '器用度': tec + keptDiceData['A'], '敏捷度': tec + keptDiceData['B'],
+                '筋力': phy + keptDiceData['C'], '生命力': phy + keptDiceData['D'],
+                '知力': spi + keptDiceData['E'], '精神力': spi + keptDiceData['F']
+            };
 
-        // 【診断生成】
-        let analysis = [];
-        let concerns = [];
+            const keyMap = {
+                '器用度': 'A', '敏捷度': 'B',
+                '筋力': 'C', '生命力': 'D',
+                '知力': 'E', '精神力': 'F'
+            };
 
-        // 1. 能力値の強み・弱み判定
-        for (const [name, val] of Object.entries(stats)) {
-            if (val >= 18) analysis.push(`<strong>${name}</strong>が非常に高いです。この能力を活かせる技能で輝けるでしょう。`);
-            else if (val <= 10) concerns.push(`<strong>${name}</strong>が少し低めです。装備や魔法でカバーを検討してください。`);
-        }
+            const baseMapping = {
+                'A': tec, 'B': tec,
+                'C': phy, 'D': phy,
+                'E': spi, 'F': spi
+            };
 
-        // 2. 成長アドバイス（6の倍数あと1を複数対応）
-        let nextBreak = [];
-        for (const [key, val] of Object.entries(stats)) {
-            if (val % 6 === 5) nextBreak.push(key);
-        }
+            // 理論上の最大・最小ボーナスを算出するための情報を探す
+            const currentStock = stockDiceList.find(item => item.id === keptDiceId);
+            const raceId = currentStock ? currentStock.raceId : raceSelect.value;
+            const selectedRace = RACES[raceId];
 
-        // 3. ワンポイント・アドバイス
-        const tips = [
-            "「判定」に迷ったら、まずは得意な能力にボーナスが付く技能を優先して上げると成長が実感しやすいですよ。",
-            "HPやMPが低い時は、無理せず「魔法のアイテム」を一つ持っておくだけで安心感が段違いです。",
-            "能力値が低い場所は「弱点」ではなく「味方に助けてもらうためのチャームポイント」と考えましょう！",
-            "戦闘ではダイス目も大切ですが、味方との連携でボーナスをもらうのが一番の近道です。"
-        ];
-        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            // 最終能力値とボーナスのHTML作成
+            let finalHtml = `<h4 style="width:100%; margin-top:0; margin-bottom:10px;">📊 最終能力値と能力ボーナス</h4>`;
+            finalHtml += `<div style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%;">`;
 
-        // 【HTML出力】
-        let html = `<h4>📊 能力診断レポート</h4>`;
-        
-        if (analysis.length > 0) html += `<p><strong>長所:</strong><br>${analysis.join('<br>')}</p>`;
-        if (concerns.length > 0) html += `<p><strong>補うべき弱点:</strong><br>${concerns.join('<br>')}</p>`;
-        else html += `<p>致命的な弱点は見当たりません！とてもバランスの良いステータスです。</p>`;
+            for (const [name, val] of Object.entries(stats)) {
+                const key = keyMap[name];
+                const actualBonus = Math.floor(val / 6);
+                
+                let bonusStyle = "color: #333; font-weight: bold;";
+                let extraLabel = "";
 
-        if (nextBreak.length > 0) {
-            html += `<div style="background:#e3f2fd; padding:10px; margin:10px 0; border-radius:5px;">
-                     <strong>💡 あと少しで成長！(ボーナス+1のチャンス)</strong><br>
-                     ${nextBreak.join('、')} が、あと「1」上がれば能力ボーナスが強化されます。<br>
-                     成長の優先順位として覚えておくと便利です！
+                if (selectedRace && selectedRace.dice[key]) {
+                    const diceStr = selectedRace.dice[key];
+                    const match = diceStr.match(/^(\d+)d6(?:([+-])(\d+))?$/);
+                    
+                    if (match) {
+                        const count = parseInt(match[1], 10);
+                        const sign = match[2];
+                        const mod = match[3] ? parseInt(match[3], 10) : 0;
+                        
+                        let dMin = count * 1;
+                        let dMax = count * 6;
+                        if (sign === "+") { dMin += mod; dMax += mod; }
+                        else if (sign === "-") { dMin -= mod; dMax -= mod; }
+
+                        let modVal = 0;
+                        if (currentStock && currentStock.activeMod) {
+                            modVal = currentStock.mods[currentStock.activeMod][key] || 0;
+                        }
+
+                        const baseVal = baseMapping[key];
+                        // ボーナスの取りうる最小と最大
+                        const minBonus = Math.floor((baseVal + dMin + modVal) / 6);
+                        const maxBonus = Math.floor((baseVal + dMax + modVal) / 6);
+
+                        // 理論上のボーナス範囲が変動する場合のみ判定 (固定値などの場合に無駄に最大最小にならないよう制御)
+                        if (minBonus !== maxBonus) {
+                            if (actualBonus === maxBonus) {
+                                bonusStyle = "color: #e91e63; font-weight: bold;";
+                                extraLabel = ` <span style="font-size:0.8em; color:#e91e63;">(最大!)</span>`;
+                            } else if (actualBonus === minBonus) {
+                                bonusStyle = "color: #2196f3; font-weight: bold;";
+                                extraLabel = ` <span style="font-size:0.8em; color:#2196f3;">(最小)</span>`;
+                            }
+                        }
+                    }
+                }
+
+                finalHtml += `
+                <div class="status-card" style="border: 2px solid #ffb74d; background: #fff; padding: 10px; border-radius: 6px; flex: 1; min-width: 120px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="font-size: 0.85em; color: #666; font-weight: bold; margin-bottom: 5px;">${name}</div>
+                    <div style="font-size: 1.4em; font-weight: bold; color: #d32f2f; margin-bottom: 5px;">${val}</div>
+                    <div style="font-size: 0.95em; background: #fff5e6; border-radius: 4px; padding: 4px 0;">
+                        ボーナス: <span style="${bonusStyle}">${actualBonus}</span>${extraLabel}
+                    </div>
+                </div>`;
+            }
+            finalHtml += `</div>`;
+            finalStatusDisplay.innerHTML = finalHtml;
+
+            // 【診断生成】
+            let analysis = [];
+            let concerns = [];
+
+            // 1. 能力値の強み・弱み判定
+            for (const [name, val] of Object.entries(stats)) {
+                if (val >= 18) analysis.push(`<strong>${name}</strong>が非常に高いです。この能力を活かせる技能で輝けるでしょう。`);
+                else if (val <= 10) concerns.push(`<strong>${name}</strong>が少し低めです。装備や魔法でカバーを検討してください。`);
+            }
+
+            // 2. 成長アドバイス（6の倍数あと1を複数対応）
+            let nextBreak = [];
+            for (const [key, val] of Object.entries(stats)) {
+                if (val % 6 === 5) nextBreak.push(key);
+            }
+
+            // 3. ワンポイント・アドバイス
+            const tips = [
+                "「判定」に迷ったら、まずは得意な能力にボーナスが付く技能を優先して上げると成長が実感しやすいですよ。",
+                "HPやMPが低い時は、無理せず「魔法のアイテム」を一つ持っておくだけで安心感が段違いです。",
+                "能力値が低い場所は「弱点」ではなく「味方に助けてもらうためのチャームポイント」と考えましょう！",
+                "戦闘ではダイス目も大切ですが、味方との連携でボーナスをもらうのが一番の近道です。"
+            ];
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+
+            // 【HTML出力】
+            let html = `<h4>🔮 適性診断レポート</h4>`;
+            
+            if (analysis.length > 0) html += `<p><strong>長所:</strong><br>${analysis.join('<br>')}</p>`;
+            if (concerns.length > 0) html += `<p><strong>補うべき弱点:</strong><br>${concerns.join('<br>')}</p>`;
+            else html += `<p>致命的な弱点は見当たりません！とてもバランスの良いステータスです。</p>`;
+
+            if (nextBreak.length > 0) {
+                html += `<div style="background:#e3f2fd; padding:10px; margin:10px 0; border-radius:5px;">
+                         <strong>💡 あと少しで成長！(ボーナス+1のチャンス)</strong><br>
+                         ${nextBreak.join('、')} が、あと「1」上がれば能力ボーナスが強化されます。<br>
+                         成長の優先順位として覚えておくと便利です！
+                         </div>`;
+            }
+
+            html += `<div style="border-top:1px solid #ccc; padding-top:10px; font-size:0.9em; color:#555;">
+                     <strong>💡 ワンポイント:</strong> ${randomTip}
                      </div>`;
-        }
 
-        html += `<div style="border-top:1px solid #ccc; padding-top:10px; font-size:0.9em; color:#555;">
-                 <strong>💡 ワンポイント:</strong> ${randomTip}
-                 </div>`;
-
-        jobAdviceDisplay.innerHTML = html;
-        jobAdviceDisplay.style.display = 'block';
-    });
+            jobAdviceDisplay.innerHTML = html;
+            jobAdviceDisplay.style.display = 'block';
+        });
     }
 
     // ==========================================
